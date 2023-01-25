@@ -29,12 +29,8 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/three-app" # App source code path
           api_location: "api" # Api source code path - optional
-          output_location: "three-app/dist" # Built app content directory - optional
+          output_location: "/dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-      - name: Open Web Client Directory
-        working-directory: /three-app
-        run: |
-            ls -la
               
 
   close_pull_request_job:
