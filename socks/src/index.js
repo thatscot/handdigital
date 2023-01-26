@@ -8,7 +8,7 @@ const httpServer2 = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5000',
     methods: ['GET', 'POST'],
   },
 });
@@ -30,39 +30,37 @@ const directions = [
   'stop',
 ];
 
-// app.get('/', (req, res) => {
-//   res.send(`no direction, follow path /move/ + ${directions}`);
-// })
+app.get('/', (req, res) => {
+  // io.emit('message', 'sending empty direction', (response) => {
+  //   console.log(response);
+  // });
 
-// app.get('/move/:direction', (req, res) => {
+  res.send(`no direction, follow path /move/ + ${directions}`);
+});
 
-//   const direction = req.params.direction;
+app.get('/move/:direction', (req, res) => {
+  const direction = req.params.direction;
 
-//   if (direction && directions.includes(direction)){
-    
-//     io.emit('action', direction, (response) => {
-//       console.log(response);
-//       res.send(response);
-//     });
-
-//   }
-//   else{
-//     res.send('no valid direction added');
-//   }
-// })
-
-io2.on('command', (command) => {
-  console.log('command: ', command);
-  if (command && directions.includes(command)){
-    
-    io.emit('action', command, (response) => {
+  if (direction && directions.includes(direction)) {
+    io.emit('message', direction, (response) => {
       console.log(response);
     });
+  } else {
+    res.send('no valid direction added');
+  }
+});
 
-  }
-  else{
-    console.log('no valid command');
-  }
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+//   socket.emit('message', 'hello world', (response) => {
+//     console.log(response);
+//   });
+// });
+
+io.on('connection', (socket) => {
+  socket.on('command', (msg) => {
+    console.log(msg);
+  });
 });
 
 httpServer.listen(3000, () => {

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 const MODEL_PATH = "src/assets/models/gesture_recognizer.task";
 
-const useGestureRecogniser = ({ numHands = 2, runningMode = "video" } = {}) => {
+const useGestureRecogniser = ({ numHands = 1, runningMode = "video" } = {}) => {
   const [gestureRecogniser, setGestureRecogniser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
