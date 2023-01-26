@@ -35,7 +35,7 @@ const Drone = ({ action, position }) => {
   console.log(action);
   const droneRef = useRef();
   useFrame(() => {
-    console.log(droneRef.current.position);
+    // console.log(droneRef.current.position);
     switch (action) {
       case 'forward': {
         console.log('moving forward');
