@@ -16,9 +16,19 @@ function App() {
   const canvasElement = useRef(null);
   const canvasCtx = canvasElement.current?.getContext("2d");
 
+  const [commandQueue, setCommandQueue] = useState([]);
+
+  function addToQueue(newCommand) {
+    // console.log("Adding command to queue", newCommand);
+    setCommandQueue((prevCommandQueue) => prevCommandQueue.unshift(newCommand));
+  }
+
+  function getLastCommand() {
+    return commandQueue[commandQueue - 1] || undefined;
+  }
+
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
-
   const {
     stream,
     isLoading: isUserMediaLoading,
@@ -29,13 +39,17 @@ function App() {
     videoElement.current.srcObject = stream;
   }
 
-  if (!isGestureRecogniserLoading) {
-    predictWebcam({
-      gestureRecogniser,
-      video: videoElement.current,
-      canvasCtx,
-    });
-  }
+  useEffect(() => {
+    if (!isGestureRecogniserLoading) {
+      predictWebcam({
+        gestureRecogniser,
+        video: videoElement.current,
+        canvasCtx,
+        previousCommand: getLastCommand(),
+        addToQueue,
+      });
+    }
+  }, [isGestureRecogniserLoading, gestureRecogniser, videoElement, canvasCtx]);
 
   return (
     <div className="App">
@@ -49,13 +63,6 @@ function App() {
         >
           {/* <source src="ted-talk-advert.mov" type="video/mp4" /> */}
         </video>
-        {/* <img
-          width={1280}
-          height={720}
-          ref={imageElement}
-          src="simon-cowell-2012.jpeg"
-          crossOrigin="anonymous"
-        /> */}
       </div>
     </div>
   );

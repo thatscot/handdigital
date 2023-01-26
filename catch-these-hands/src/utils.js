@@ -61,9 +61,24 @@ const drawBoundingBox = (ctx, result) => {
   });
 };
 
-async function predictWebcam({ gestureRecogniser, video, canvasCtx }) {
+async function predictWebcam({
+  gestureRecogniser,
+  video,
+  canvasCtx,
+  addToQueue,
+  previousCommand,
+}) {
   let nowInMs = Date.now();
   const results = await gestureRecogniser.recognizeForVideo(video, nowInMs);
+  const newCommandArr = results.gestures?.[0];
+  if (newCommandArr) {
+    const newCommand = newCommandArr[0];
+    const commandName = newCommand.categoryName;
+    if (commandName !== previousCommand) {
+      addToQueue(commandName);
+      previousCommand = commandName;
+    }
+  }
 
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
@@ -72,7 +87,13 @@ async function predictWebcam({ gestureRecogniser, video, canvasCtx }) {
   drawBoundingBox(canvasCtx, results);
 
   window.requestAnimationFrame(() =>
-    predictWebcam({ gestureRecogniser, video, canvasCtx })
+    predictWebcam({
+      gestureRecogniser,
+      video,
+      canvasCtx,
+      addToQueue,
+      previousCommand,
+    })
   );
 }
 
