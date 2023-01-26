@@ -1,3 +1,5 @@
+const PADDING = 5;
+
 const drawLandmarks = (ctx, result) => {
   const { width, height } = ctx.canvas;
   ctx.fillStyle = "#2d2d2d";
@@ -32,16 +34,16 @@ const drawBoundingBox = (ctx, result) => {
       { minX: 1, minY: 1, maxX: 0, maxY: 0 }
     );
 
-    let boxWidth = maxX - minX;
-    let boxHeight = maxY - minY;
+    const boxWidth = maxX - minX;
+    const boxHeight = maxY - minY;
 
-    const adjustedMinX = width * minX - 5;
-    const adjustedMinY = height * minY - 5;
+    const adjustedMinX = width * minX - PADDING;
+    const adjustedMinY = height * minY - PADDING;
 
-    const adjustedBoxWidth = width * boxWidth + 10;
-    const adjustedBoxHeight = height * boxHeight + 10;
+    const adjustedBoxWidth = width * boxWidth + PADDING * 2;
+    const adjustedBoxHeight = height * boxHeight + PADDING * 2;
 
-    const adjustedMaxY = height * maxY + 5;
+    const adjustedMaxY = height * maxY + PADDING;
     ctx.strokeRect(
       adjustedMinX,
       adjustedMinY,
@@ -50,76 +52,13 @@ const drawBoundingBox = (ctx, result) => {
     );
 
     ctx.fillRect(adjustedMinX, adjustedMaxY, adjustedBoxWidth, 20);
-
     ctx.fillStyle = "white";
     ctx.fillText(
       result.gestures[index][0].categoryName,
-      adjustedMinX + 5,
-      adjustedMaxY + 15
+      adjustedMinX + PADDING,
+      adjustedMaxY + PADDING * 3
     );
   });
-
-  // result.landmarks.forEach((landmarks, index) => {
-  //   let minx = 1,
-  //     maxx = 0;
-  //   for (const i of landmarks) {
-  //     if (i.x > maxx) {
-  //       maxx = i.x;
-  //     }
-  //     if (i.x < minx) {
-  //       minx = i.x;
-  //     }
-  //   }
-
-  //   let miny = 1,
-  //     maxy = 0;
-  //   for (const i of landmarks) {
-  //     if (i.y > maxy) {
-  //       maxy = i.y;
-  //     }
-  //     if (i.y < miny) {
-  //       miny = i.y;
-  //     }
-  //   }
-
-  //   console.log({ minx, maxx, miny, maxy });
-
-  //   let boxWidth = maxx - minx;
-  //   let boxHeight = maxy - miny;
-
-  //   const adjustedMinX = width * minx - 5;
-  //   const adjustedMinY = height * miny - 5;
-
-  //   const adjustedBoxWidth = width * boxWidth + 10;
-  //   const adjustedBoxHeight = height * boxHeight + 10;
-
-  //   const adjustedMaxY = height * maxy + 5;
-
-  //   console.log(
-  //     width * minx,
-  //     height * miny,
-  //     width * boxWidth,
-  //     height * boxHeight
-  //   );
-
-  //   ctx.strokeRect(
-  //     adjustedMinX,
-  //     adjustedMinY,
-  //     adjustedBoxWidth,
-  //     adjustedBoxHeight
-  //   );
-
-  //   ctx.font = "15px sans-serif";
-
-  //   ctx.fillRect(adjustedMinX, adjustedMaxY, adjustedBoxWidth, 20);
-
-  //   ctx.fillStyle = "white";
-  //   ctx.fillText(
-  //     result.gestures[index][0].categoryName,
-  //     adjustedMinX + 5,
-  //     adjustedMaxY + 15
-  //   );
-  // });
 };
 
 async function predictWebcam({ gestureRecogniser, video, canvasCtx }) {
