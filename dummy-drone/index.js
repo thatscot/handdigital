@@ -14,6 +14,11 @@ app.get('/receive/:direction', (req, res) => {
     res.send({ message });
 })
 
+app.get('/', (req, res) => {
+    console.log("a")
+    res.send({ a: "a" });
+})
+
 io.on('connection', (socket) => {
     console.log('a user connected');
 });
