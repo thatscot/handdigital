@@ -14,21 +14,44 @@ const io = new Server(httpServer, {
 const directions = [
   'up',
   'down',
-  'strafeleft',
-  'straferight',
-  'turnleft',
-  'turnright',
+  'left',
+  'right',
   'forwards',
   'backwards',
   'stop',
 ];
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.emit('message', 'hello world', (response) => {
-    console.log(response);
-  });
-});
+app.get('/', (req, res) => {
+  // io.emit('message', 'sending empty direction', (response) => {
+  //   console.log(response);
+  // });
+
+  res.send(`no direction, follow path /move/ + ${directions}`);
+})
+
+app.get('/move/:direction', (req, res) => {
+
+  const direction = req.params.direction;
+
+  if (direction && directions.includes(direction)){
+    
+    io.emit('message', direction, (response) => {
+      console.log(response);
+      res.send(response);
+    });
+
+  }
+  else{
+    res.send('no valid direction added');
+  }
+})
+
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+//   socket.emit('message', 'hello world', (response) => {
+//     console.log(response);
+//   });
+// });
 
 httpServer.listen(3000, () => {
   console.log('listening on *:3000');
