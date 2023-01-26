@@ -30,33 +30,58 @@ const Ground = (props) => {
   );
 };
 
-const Drone = (props, {}) => {
+const Drone = ({ action, position }) => {
   const gltf = useLoader(GLTFLoader, '/file-1592658408798.glb');
-
+  console.log(action);
+  const droneRef = useRef();
+  useFrame(() => {
+    console.log(droneRef.current.position);
+    switch (action) {
+      case 'forward': {
+        console.log('moving forward');
+        droneRef.current.position.x = droneRef.current.position.x + 3;
+        break;
+      }
+    }
+  });
   return (
     <>
-      <primitive {...props} object={gltf.scene} scale={1} />
+      <primitive
+        ref={droneRef}
+        object={gltf.scene}
+        scale={1}
+        position={[0, 3, 0]}
+      />
     </>
   );
 };
 
 export default function App() {
   const socket = io('http://localhost:3000');
-  // socket.on('connect', () => {
-  //   console.log(socket);
-  //   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-  // });
-  // socket.on('message', (msg, callback) => {
-  //   console.log(msg);
-  // });
 
-  const [stuff, setStuff] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
+  const [action, setAction] = useState('');
 
-  const response = socket.on('message', (msg) => {
-    console.log('msg ', msg);
-    setStuff(msg);
-  });
-  console.log(response);
+  useEffect(() => {
+    socket.on('connect', () => {
+      setIsConnected(true);
+    });
+
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+    });
+
+    socket.on('message', (msg) => {
+      console.log('msg ', msg);
+      setAction(msg);
+    });
+
+    return () => {
+      socket.off('disconnect');
+      socket.off('connect');
+    };
+  }, []);
+  console.log({ action });
   // useEffect(() => {});
   return (
     <>
@@ -73,7 +98,7 @@ export default function App() {
           <OrbitControls />
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
-          <Drone position={[1, 0, 3]} />
+          <Drone position={[1, 0, 3]} action={action} />
         </XR>
       </Canvas>
     </>
