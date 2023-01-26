@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import "./App.css";
 import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
 import { useGetUserMedia } from "./hooks/useGetUserMedia";
 import { predictWebcam } from "./utils";
+import "./App.css";
+import { useSocket } from "./hooks/useSocket";
 
 const VID_WIDTH = 1280;
 const VID_HEIGHT = 720;
@@ -17,11 +18,20 @@ function App() {
   const canvasCtx = canvasElement.current?.getContext("2d");
 
   const [commandQueue, setCommandQueue] = useState([]);
+  const [command, setCommand] = useState(undefined);
 
-  function addToQueue(newCommand) {
-    // console.log("Adding command to queue", newCommand);
-    setCommandQueue((prevCommandQueue) => prevCommandQueue.unshift(newCommand));
-  }
+  const { sendCommand, isConnected, error } = useSocket();
+
+  const handleNewCommand = (prevCommand, command) => {
+    if (isConnected && !error.message) {
+      if (command !== prevCommand) {
+        if (prevCommand) sendCommand(`${prevCommand}-end`);
+        setCommand(`${command}-start`);
+      }
+    } else {
+      if (error.message) console.log({ error });
+    }
+  };
 
   function getLastCommand() {
     return commandQueue[commandQueue - 1] || undefined;
@@ -29,6 +39,14 @@ function App() {
 
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
+
+  window.onkeydown = (event) => {
+    if (!event.repeat) {
+      console.log("KEYDOWN", event.key);
+    }
+  };
+  window.onkeyup = (event) => console.log("KEYUP", event.key);
+
   const {
     stream,
     isLoading: isUserMediaLoading,
@@ -45,8 +63,7 @@ function App() {
         gestureRecogniser,
         video: videoElement.current,
         canvasCtx,
-        previousCommand: getLastCommand(),
-        addToQueue,
+        handleNewCommand,
       });
     }
   }, [isGestureRecogniserLoading, gestureRecogniser, videoElement, canvasCtx]);
@@ -60,9 +77,7 @@ function App() {
           height={VID_HEIGHT}
           ref={videoElement}
           autoPlay={true}
-        >
-          {/* <source src="ted-talk-advert.mov" type="video/mp4" /> */}
-        </video>
+        />
       </div>
     </div>
   );

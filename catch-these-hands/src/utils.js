@@ -65,7 +65,7 @@ async function predictWebcam({
   gestureRecogniser,
   video,
   canvasCtx,
-  addToQueue,
+  handleNewCommand,
   previousCommand,
 }) {
   let nowInMs = Date.now();
@@ -74,10 +74,7 @@ async function predictWebcam({
   if (newCommandArr) {
     const newCommand = newCommandArr[0];
     const commandName = newCommand.categoryName;
-    if (commandName !== previousCommand) {
-      addToQueue(commandName);
-      previousCommand = commandName;
-    }
+    handleNewCommand(previousCommand, commandName);
   }
 
   canvasCtx.save();
@@ -92,7 +89,7 @@ async function predictWebcam({
       video,
       canvasCtx,
       addToQueue,
-      previousCommand,
+      previousCommand: commandName,
     })
   );
 }
