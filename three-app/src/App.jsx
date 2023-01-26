@@ -6,7 +6,10 @@ import { useGLTF, Sky, useTexture, OrbitControls } from '@react-three/drei';
 import { Physics, RigidBody, CuboidCollider, Debug } from '@react-three/rapier';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import { io } from 'socket.io-client';
+
 import grass from './assets/grass.png';
+import { useEffect } from 'react';
 
 const Ground = (props) => {
   const texture = useTexture(grass);
@@ -27,8 +30,9 @@ const Ground = (props) => {
   );
 };
 
-const Drone = (props) => {
+const Drone = (props, {}) => {
   const gltf = useLoader(GLTFLoader, '/file-1592658408798.glb');
+
   return (
     <>
       <primitive {...props} object={gltf.scene} scale={1} />
@@ -37,6 +41,23 @@ const Drone = (props) => {
 };
 
 export default function App() {
+  const socket = io('http://localhost:3000');
+  // socket.on('connect', () => {
+  //   console.log(socket);
+  //   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  // });
+  // socket.on('message', (msg, callback) => {
+  //   console.log(msg);
+  // });
+
+  const [stuff, setStuff] = useState('');
+
+  const response = socket.on('message', (msg) => {
+    console.log('msg ', msg);
+    setStuff(msg);
+  });
+  console.log(response);
+  // useEffect(() => {});
   return (
     <>
       <VRButton />
