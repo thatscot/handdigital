@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
-import {
-  drawBoundingBox,
-  drawLandmarks,
-  predictWebcam,
-} from "./assets/models/utils";
+import { predictWebcam } from "./utils";
 
 function App() {
   const videoElement = useRef(null);
