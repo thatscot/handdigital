@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
-import { useGetUserMedia } from "./hooks/useGetUserMedia";
-import { predictWebcam } from "./utils";
-import "./App.css";
-import { useSocket } from "./hooks/useSocket";
+import { useEffect, useRef, useState } from 'react';
+import { useGestureRecogniser } from './hooks/useGestureRecogniser';
+import { useGetUserMedia } from './hooks/useGetUserMedia';
+import { predictWebcam } from './utils';
+import './App.css';
+import { useSocket } from './hooks/useSocket';
 
 const VID_WIDTH = 1280;
 const VID_HEIGHT = 720;
@@ -15,7 +15,7 @@ const constraints = {
 function App() {
   const videoElement = useRef(null);
   const canvasElement = useRef(null);
-  const canvasCtx = canvasElement.current?.getContext("2d");
+  const canvasCtx = canvasElement.current?.getContext('2d');
 
   const [commandQueue, setCommandQueue] = useState([]);
   const [command, setCommand] = useState(undefined);
@@ -42,10 +42,27 @@ function App() {
 
   window.onkeydown = (event) => {
     if (!event.repeat) {
-      console.log("KEYDOWN", event.key);
+      console.log('KEYDOWN', event.key);
+      if (event.key === 'ArrowDown') {
+        sendCommand('down');
+      }
+      if (event.key === 'ArrowUp') {
+        sendCommand('up');
+      }
+      if (event.key === 'ArrowLeft') {
+        sendCommand('left');
+      }
+      if (event.key === 'ArrowRight') {
+        sendCommand('right');
+      }
+      if (event.key === '/') {
+        sendCommand('stop');
+      }
     }
   };
-  window.onkeyup = (event) => console.log("KEYUP", event.key);
+  window.onkeyup = (event) => {
+    console.log('KEYUP', event.key);
+  };
 
   const {
     stream,

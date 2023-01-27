@@ -1,15 +1,15 @@
-import React, { useRef, useState, useLayoutEffect } from "react";
-import * as THREE from "three";
-import { Canvas, useLoader, useFrame } from "@react-three/fiber";
-import { VRButton, ARButton, XR, Controllers, Hands } from "@react-three/xr";
-import { useGLTF, Sky, useTexture, OrbitControls } from "@react-three/drei";
-import { Physics, RigidBody, CuboidCollider, Debug } from "@react-three/rapier";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import React, { useRef, useState, useLayoutEffect } from 'react';
+import * as THREE from 'three';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { VRButton, ARButton, XR, Controllers, Hands } from '@react-three/xr';
+import { useGLTF, Sky, useTexture, OrbitControls } from '@react-three/drei';
+import { Physics, RigidBody, CuboidCollider, Debug } from '@react-three/rapier';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
-import grass from "./assets/grass.png";
-import { useEffect } from "react";
+import grass from './assets/grass.png';
+import { useEffect } from 'react';
 
 const Ground = (props) => {
   const texture = useTexture(grass);
@@ -31,15 +31,36 @@ const Ground = (props) => {
 };
 
 const Drone = ({ action, position }) => {
-  const gltf = useLoader(GLTFLoader, "/file-1592658408798.glb");
+  const gltf = useLoader(GLTFLoader, '/file-1592658408798.glb');
   console.log(action);
   const droneRef = useRef();
   useFrame(() => {
     // console.log(droneRef.current.position);
     switch (action) {
-      case "forward": {
-        console.log("moving forward");
-        droneRef.current.position.x = droneRef.current.position.x + 3;
+      case 'up': {
+        console.log('moving forward');
+        droneRef.current.position.x = droneRef.current.position.x + 1;
+        break;
+      }
+      case 'left': {
+        console.log('left');
+        droneRef.current.position.z = droneRef.current.position.z - 1;
+        break;
+      }
+      case 'right': {
+        console.log('right');
+        droneRef.current.position.z = droneRef.current.position.z + 1;
+        break;
+      }
+      case 'down': {
+        console.log('back');
+        droneRef.current.position.x = droneRef.current.position.x - 1;
+        break;
+      }
+      case 'stop': {
+        console.log('stop');
+        droneRef.current.position.x = droneRef.current.position.x;
+        droneRef.current.position.y = droneRef.current.position.y;
         break;
       }
     }
@@ -49,7 +70,7 @@ const Drone = ({ action, position }) => {
       <primitive
         ref={droneRef}
         object={gltf.scene}
-        scale={1}
+        scale={10}
         position={[0, 3, 0]}
       />
     </>
@@ -57,29 +78,29 @@ const Drone = ({ action, position }) => {
 };
 
 export default function App() {
-  const socket = io("http://localhost:3000");
+  const socket = io('http://localhost:3000');
 
   const [isConnected, setIsConnected] = useState(false);
-  const [action, setAction] = useState("");
+  const [action, setAction] = useState('');
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.on('connect', () => {
       setIsConnected(true);
     });
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       setIsConnected(false);
     });
 
-    socket.on("message", (msg) => {
-      console.log("msg ", msg);
+    socket.on('message', (msg) => {
+      console.log('msg ', msg);
       setAction(msg);
     });
 
     return () => {
-      socket.off("disconnect");
-      socket.off("connect");
-      socket.off("message");
+      socket.off('disconnect');
+      socket.off('connect');
+      socket.off('message');
     };
   }, []);
   console.log({ action });
@@ -106,4 +127,4 @@ export default function App() {
   );
 }
 
-useGLTF.preload("/file-1592658408798.glb");
+useGLTF.preload('/file-1592658408798.glb');
