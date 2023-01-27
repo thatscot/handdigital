@@ -70,12 +70,9 @@ async function predictWebcam({
 }) {
   let nowInMs = Date.now();
   const results = await gestureRecogniser.recognizeForVideo(video, nowInMs);
-  const newCommandArr = results.gestures?.[0];
-  if (newCommandArr) {
-    const newCommand = newCommandArr[0];
-    const commandName = newCommand.categoryName;
-    handleNewCommand(previousCommand, commandName);
-  }
+  const newCommand = results.gestures?.[0]?.[0];
+  const commandName = newCommand?.categoryName ?? "None";
+  handleNewCommand(previousCommand, commandName);
 
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
@@ -88,8 +85,8 @@ async function predictWebcam({
       gestureRecogniser,
       video,
       canvasCtx,
-      addToQueue,
       previousCommand: commandName,
+      handleNewCommand,
     })
   );
 }

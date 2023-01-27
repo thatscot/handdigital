@@ -17,35 +17,28 @@ function App() {
   const canvasElement = useRef(null);
   const canvasCtx = canvasElement.current?.getContext("2d");
 
-  const [commandQueue, setCommandQueue] = useState([]);
-  const [command, setCommand] = useState(undefined);
-
   const { sendCommand, isConnected, error } = useSocket();
 
   const handleNewCommand = (prevCommand, command) => {
     if (isConnected && !error.message) {
       if (command !== prevCommand) {
-        if (prevCommand) sendCommand(`${prevCommand}-end`);
-        setCommand(`${command}-start`);
+        if (prevCommand) sendCommand(`${prevCommand}_end`);
+        sendCommand(`${command}_start`);
       }
     } else {
       if (error.message) console.log({ error });
     }
   };
 
-  function getLastCommand() {
-    return commandQueue[commandQueue - 1] || undefined;
-  }
-
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
 
-  window.onkeydown = (event) => {
-    if (!event.repeat) {
-      console.log("KEYDOWN", event.key);
-    }
-  };
-  window.onkeyup = (event) => console.log("KEYUP", event.key);
+  // window.onkeydown = (event) => {
+  //   if (!event.repeat) {
+  //     console.log("KEYDOWN", event.key);
+  //   }
+  // };
+  // window.onkeyup = (event) => console.log("KEYUP", event.key);
 
   const {
     stream,

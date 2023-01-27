@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
 const useSocket = () => {
@@ -6,7 +6,7 @@ const useSocket = () => {
   const [error, setError] = useState({ message: undefined, error: undefined });
   let socket;
   try {
-    socket = io("http://localhost:3000");
+    socket = io("http://localhost:3001");
   } catch (e) {
     setError({ message: "Failed to find socket", error: e });
   }
