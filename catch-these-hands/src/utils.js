@@ -91,4 +91,8 @@ async function predictWebcam({
   );
 }
 
-export { drawBoundingBox, drawLandmarks, predictWebcam };
+function formatLabel(term) {
+  return term.split("_").join(" ");
+}
+
+export { drawBoundingBox, drawLandmarks, predictWebcam, formatLabel };

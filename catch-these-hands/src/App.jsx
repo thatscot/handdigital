@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
 import { useGetUserMedia } from "./hooks/useGetUserMedia";
-import { predictWebcam } from "./utils";
-import "./App.css";
+import { formatLabel, predictWebcam } from "./utils";
 import { useSocket } from "./hooks/useSocket";
+import { CONTROL_MAP } from "./contants";
+import "./App.css";
 
 const VID_WIDTH = 1280;
 const VID_HEIGHT = 720;
@@ -22,8 +23,9 @@ function App() {
   const handleNewCommand = (prevCommand, command) => {
     if (isConnected && !error.message) {
       if (command !== prevCommand) {
-        if (prevCommand) sendCommand(`${prevCommand}_end`);
-        sendCommand(`${command}_start`);
+        if (prevCommand)
+          sendCommand({ name: CONTROL_MAP.get(prevCommand), lifecycle: "end" });
+        sendCommand({ name: CONTROL_MAP.get(command), lifecycle: "start" });
       }
     } else {
       if (error.message) console.log({ error });
@@ -32,13 +34,6 @@ function App() {
 
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
-
-  // window.onkeydown = (event) => {
-  //   if (!event.repeat) {
-  //     console.log("KEYDOWN", event.key);
-  //   }
-  // };
-  // window.onkeyup = (event) => console.log("KEYUP", event.key);
 
   const {
     stream,
@@ -63,6 +58,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Control center</h1>
       <div className="camera-container">
         <canvas width={VID_WIDTH} height={VID_HEIGHT} ref={canvasElement} />
         <video
@@ -72,6 +68,15 @@ function App() {
           autoPlay={true}
         />
       </div>
+      <fieldset>
+        <legend>Controls</legend>
+        {[...CONTROL_MAP.entries()].map(([key, value]) => (
+          <>
+            <span>{formatLabel(key)}: </span>
+            <span>{value}</span>
+          </>
+        ))}
+      </fieldset>
     </div>
   );
 }

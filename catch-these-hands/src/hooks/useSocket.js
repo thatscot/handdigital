@@ -25,9 +25,9 @@ const useSocket = () => {
     };
   }, []);
 
-  const sendCommand = (command) => {
-    console.log({ command });
-    socket.emit("command", { command });
+  const sendCommand = ({ name, lifecycle }) => {
+    console.log({ command: { name, lifecycle } });
+    socket.emit("command", { name, lifecycle });
   };
 
   return { sendCommand, isConnected, error };
