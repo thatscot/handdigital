@@ -2,14 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
-import { useKeyboardControls } from '@react-three/drei';
-import io from 'socket.io-client';
+import { disconnectSocket, initiateSocketConnection, onMessageHandler } from '../utils/sockets';
 
 export const Player = () => {
   const playerRef = useRef(null);
-  const [_, getKeys] = useKeyboardControls();
-
-  const socket = io('http://localhost:3000');
 
   const [isConnected, setIsConnected] = useState(false);
   const [action, setAction] = useState({
@@ -18,23 +14,13 @@ export const Player = () => {
   });
 
   useEffect(() => {
-    socket.on('connect', () => {
-      setIsConnected(true);
-    });
 
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-    });
+    initiateSocketConnection();
 
-    socket.on('message', ({ name, lifecycle }) => {
-      console.log({ command: { name, lifecycle } });
-      setAction({ name, lifecycle });
-    });
+    onMessageHandler(setAction);
 
     return () => {
-      socket.off('disconnect');
-      socket.off('connect');
-      socket.off('message');
+      disconnectSocket();
     };
   }, []);
 
