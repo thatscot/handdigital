@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { useKeyboardControls } from '@react-three/drei';
@@ -7,40 +8,53 @@ export const Player = () => {
     const playerRef = useRef(null);
     const [_, getKeys] = useKeyboardControls();
 
-    useFrame((_, delta) => {
+    useFrame((state, delta) => {
         if (!playerRef.current) {
             return;
         }
 
+        // Movement
         const { forward, back, left, right, up, down } = getKeys();
 
         const velocity = 5 * delta;
-        const position = playerRef.current.translation();
+        const playerPosition = playerRef.current.translation();
 
         if (forward) {
-            playerRef.current.setTranslation({ x: position.x, y: position.y, z: position.z - velocity});
+            playerRef.current.setTranslation({ x: playerPosition.x, y: playerPosition.y, z: playerPosition.z - velocity});
         };
 
         if (back) {
-            playerRef.current.setTranslation({ x: position.x, y: position.y, z: position.z + velocity});
+            playerRef.current.setTranslation({ x: playerPosition.x, y: playerPosition.y, z: playerPosition.z + velocity});
         };
 
         if (left) {
-            playerRef.current.setTranslation({ x: position.x - velocity , y: position.y, z: position.z});
+            playerRef.current.setTranslation({ x: playerPosition.x - velocity , y: playerPosition.y, z: playerPosition.z});
         };
 
         if (right) {
-            playerRef.current.setTranslation({ x: position.x + velocity, y: position.y, z: position.z});
+            playerRef.current.setTranslation({ x: playerPosition.x + velocity, y: playerPosition.y, z: playerPosition.z});
         };
 
         if (up) {
-            playerRef.current.setTranslation({ x: position.x, y: position.y + velocity, z: position.z});
+            playerRef.current.setTranslation({ x: playerPosition.x, y: playerPosition.y + velocity, z: playerPosition.z});
         };
 
         if (down) {
-            playerRef.current.setTranslation({ x: position.x, y: position.y - velocity, z: position.z});
+            playerRef.current.setTranslation({ x: playerPosition.x, y: playerPosition.y - velocity, z: playerPosition.z});
         };
 
+        // Camera
+        const cameraPosition = new THREE.Vector3();
+        cameraPosition.copy(playerPosition);
+        cameraPosition.z += 4;
+        cameraPosition.y += 0.75;
+
+        const cameraTarget = new THREE.Vector3();
+        cameraTarget.copy(playerPosition);
+        cameraTarget.y += 0.25;
+
+        state.camera.position.copy(cameraPosition);
+        state.camera.lookAt(cameraTarget);
     });
 
     return (
