@@ -13,7 +13,11 @@ const httpServer2 = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     // origin: ['http://localhost:5000', 'http://localhost:5173'],
-    origin: [process.env.THREE_APP_URL, process.env.HANDS_APP_URL],
+    origin: [
+      process.env.THREE_APP_URL,
+      process.env.HANDS_APP_URL,
+      'http://localhost:5000',
+    ],
     methods: ['GET', 'POST'],
   },
 });
