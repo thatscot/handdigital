@@ -1,0 +1,39 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+fieldset {
+  border-radius: .5rem;
+  width: 10rem;
+  text-align: start;
+  display: grid;
+  gap: .5rem 1rem;
+  grid-template-columns: max-content 1fr;
+}
+
+.camera-container canvas {
+  position: absolute;
+}
+
+.camera-container {
+  outline: solid 2px rgb(91, 108, 201);
+  outline-offset: 1rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  width: min(80vw, 1280px);
+  height: 720px;
+  box-shadow: 0 5px 10px 20px rgba(16, 16, 16, 0.393);
+  margin-bottom: 2rem;
+}
+
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}

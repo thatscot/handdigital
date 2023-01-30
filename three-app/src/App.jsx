@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { KeyboardControls } from '@react-three/drei';
 import { Physics, Debug } from '@react-three/rapier';
@@ -7,7 +7,10 @@ import { Level } from './components/Level';
 import { Player } from './components/Player';
 
 export default function App() {
+  // useEffect(() => {});
   return (
+    // useGLTF.preload("/file-1592658408798.glb");
+
     <Canvas shadows camera={{ fov: 45 }}>
       <Physics gravity={[0, 0, 0]}>
         <Lights />
@@ -19,7 +22,7 @@ export default function App() {
             { name: 'left', keys: ['KeyA'] },
             { name: 'right', keys: ['KeyD'] },
             { name: 'up', keys: ['ArrowUp'] },
-            { name: 'down', keys: ['ArrowDown'] }
+            { name: 'down', keys: ['ArrowDown'] },
           ]}
         >
           <Player />
@@ -28,4 +31,4 @@ export default function App() {
       </Physics>
     </Canvas>
   );
-};
+}
