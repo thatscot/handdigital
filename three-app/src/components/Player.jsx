@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { useKeyboardControls } from '@react-three/drei';
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
 
 export const Player = () => {
   const playerRef = useRef(null);
