@@ -1,17 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
 import { useGetUserMedia } from "./hooks/useGetUserMedia";
 import { formatLabel, predictWebcam } from "./utils";
 import { useSocket } from "./hooks/useSocket";
-import { CONTROL_MAP } from "./constants";
+import { CONTROL_MAP, VID_DIMENSIONS } from "./constants";
 import "./App.css";
-
-const VID_WIDTH = 1280;
-const VID_HEIGHT = 720;
-
-const constraints = {
-  video: { width: VID_WIDTH, height: VID_HEIGHT },
-};
 
 function App() {
   const videoElement = useRef(null);
@@ -35,35 +28,15 @@ function App() {
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
 
-  // window.onkeydown = (event) => {
-  //   if (!event.repeat) {
-  //     console.log("KEYDOWN", event.key);
-  //     if (event.key === "ArrowDown") {
-  //       sendCommand("down");
-  //     }
-  //     if (event.key === "ArrowUp") {
-  //       sendCommand("up");
-  //     }
-  //     if (event.key === "ArrowLeft") {
-  //       sendCommand("left");
-  //     }
-  //     if (event.key === "ArrowRight") {
-  //       sendCommand("right");
-  //     }
-  //     if (event.key === "/") {
-  //       sendCommand("stop");
-  //     }
-  //   }
-  // };
-  // window.onkeyup = (event) => {
-  //   console.log("KEYUP", event.key);
-  // };
-
   const {
     stream,
     isLoading: isUserMediaLoading,
     isError,
-  } = useGetUserMedia({ constraints });
+  } = useGetUserMedia({
+    constraints: {
+      video: { width: VID_DIMENSIONS.WIDTH, height: VID_DIMENSIONS.HEIGHT },
+    },
+  });
 
   if (!isError && !isUserMediaLoading && videoElement.current) {
     videoElement.current.srcObject = stream;
@@ -84,10 +57,14 @@ function App() {
     <div className="App">
       <h1>Control center</h1>
       <div className="camera-container">
-        <canvas width={VID_WIDTH} height={VID_HEIGHT} ref={canvasElement} />
+        <canvas
+          width={VID_DIMENSIONS.WIDTH}
+          height={VID_DIMENSIONS.HEIGHT}
+          ref={canvasElement}
+        />
         <video
-          width={VID_WIDTH}
-          height={VID_HEIGHT}
+          width={VID_DIMENSIONS.WIDTH}
+          height={VID_DIMENSIONS.HEIGHT}
           ref={videoElement}
           autoPlay={true}
         />
