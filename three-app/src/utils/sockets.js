@@ -2,11 +2,20 @@ import { io } from 'socket.io-client';
 
 let socket;
 
-export const initiateSocketConnection = () => {
-    socket = io('http://localhost:3000');
-    console.log(`Connecting socket...`);
-};
+socket.on('connect', (setIsConnected) => {
+    console.log('Socket Connected ...');
+    setIsConnected(true);
+});
 
+socket.on('disconnect', () => {
+    console.log('Socket Disconnected ... ...');
+    setIsConnected(false);
+});
+
+export const initiateSocketConnection = () => {
+    console.log(`Connecting socket...`);
+    socket = io('http://localhost:3000');
+};
 
 export const disconnectSocket = () => {
     console.log('Disconnecting socket...');
