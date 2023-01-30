@@ -2,13 +2,14 @@ import { io } from 'socket.io-client';
 
 let socket;
 
-if (socket) {
-
-    socket.on('connect', (setIsConnected) => {
+export const onConnect = (setIsConnected) => {
+    socket.on('connect', () => {
         console.log('Socket Connected ...');
         setIsConnected(true);
     });
+};
 
+export const onDisconnect = (setIsConnected) => {
     socket.on('disconnect', () => {
         console.log('Socket Disconnected ... ...');
         setIsConnected(false);
