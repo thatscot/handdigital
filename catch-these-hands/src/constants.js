@@ -9,4 +9,9 @@ const CONTROL_MAP = new Map([
   ["None", "none"],
 ]);
 
-export { CONTROL_MAP };
+const VID_DIMENSIONS = {
+  WIDTH: 1280,
+  HEIGHT: 720,
+};
+
+export { CONTROL_MAP, VID_DIMENSIONS };

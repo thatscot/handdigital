@@ -19,7 +19,7 @@ function useGetUserMedia({ constraints }) {
       }
     }
     getStream();
-  }, [constraints, setStream, setIsLoading, setIsError]);
+  }, [setStream, setIsLoading, setIsError]);
 
   return { stream, isLoading, isError };
 }
