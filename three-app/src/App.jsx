@@ -34,13 +34,43 @@ const Drone = ({ action, position }) => {
   const gltf = useLoader(GLTFLoader, "/file-1592658408798.glb");
   console.log(action);
   const droneRef = useRef();
+  const { name, lifecycle } = action;
   useFrame(() => {
-    console.log(droneRef.current.position);
-    switch (action) {
-      case "forward": {
-        console.log("moving forward");
-        droneRef.current.position.x = droneRef.current.position.x + 3;
-        break;
+    // console.log(droneRef.current.position);
+    if (lifecycle === "end") {
+      console.log("stop");
+      droneRef.current.position.x = droneRef.current.position.x;
+      droneRef.current.position.y = droneRef.current.position.y;
+    } else if (lifecycle === "start") {
+      switch (name) {
+        case "forward": {
+          console.log("forward");
+          droneRef.current.position.x = droneRef.current.position.x + 1;
+          break;
+        }
+        case "backward": {
+          console.log("back");
+          droneRef.current.position.x = droneRef.current.position.x - 1;
+          break;
+        }
+        case "up": {
+          console.log("up");
+          droneRef.current.position.y += 1;
+        }
+        case "down": {
+          console.log("down");
+          droneRef.current.position.y -= 1;
+        }
+        case "left": {
+          console.log("left");
+          droneRef.current.position.z = droneRef.current.position.z - 1;
+          break;
+        }
+        case "right": {
+          console.log("right");
+          droneRef.current.position.z = droneRef.current.position.z + 1;
+          break;
+        }
       }
     }
   });
@@ -49,7 +79,7 @@ const Drone = ({ action, position }) => {
       <primitive
         ref={droneRef}
         object={gltf.scene}
-        scale={1}
+        scale={10}
         position={[0, 3, 0]}
       />
     </>
@@ -60,7 +90,10 @@ export default function App() {
   const socket = io("http://localhost:3000");
 
   const [isConnected, setIsConnected] = useState(false);
-  const [action, setAction] = useState("");
+  const [action, setAction] = useState({
+    name: undefined,
+    lifecycle: undefined,
+  });
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -71,9 +104,9 @@ export default function App() {
       setIsConnected(false);
     });
 
-    socket.on("message", (msg) => {
-      console.log("msg ", msg);
-      setAction(msg);
+    socket.on("message", ({ name, lifecycle }) => {
+      console.log({ command: { name, lifecycle } });
+      setAction({ name, lifecycle });
     });
 
     return () => {

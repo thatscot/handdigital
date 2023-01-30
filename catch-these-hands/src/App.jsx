@@ -3,7 +3,7 @@ import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
 import { useGetUserMedia } from "./hooks/useGetUserMedia";
 import { formatLabel, predictWebcam } from "./utils";
 import { useSocket } from "./hooks/useSocket";
-import { CONTROL_MAP } from "./contants";
+import { CONTROL_MAP } from "./constants";
 import "./App.css";
 
 const VID_WIDTH = 1280;
@@ -34,6 +34,30 @@ function App() {
 
   const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
     useGestureRecogniser();
+
+  // window.onkeydown = (event) => {
+  //   if (!event.repeat) {
+  //     console.log("KEYDOWN", event.key);
+  //     if (event.key === "ArrowDown") {
+  //       sendCommand("down");
+  //     }
+  //     if (event.key === "ArrowUp") {
+  //       sendCommand("up");
+  //     }
+  //     if (event.key === "ArrowLeft") {
+  //       sendCommand("left");
+  //     }
+  //     if (event.key === "ArrowRight") {
+  //       sendCommand("right");
+  //     }
+  //     if (event.key === "/") {
+  //       sendCommand("stop");
+  //     }
+  //   }
+  // };
+  // window.onkeyup = (event) => {
+  //   console.log("KEYUP", event.key);
+  // };
 
   const {
     stream,
