@@ -57,8 +57,11 @@ io2.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(3000, () => {
-  console.log('listening on *:3000');
+// httpServer.listen(3000, () => {
+//   console.log('listening on *:3000');
+// });
+httpServer.listen(process.env.PORT, () => {
+  console.log('listening on ', process.env.PORT);
 });
 httpServer2.listen(3001, () => {
   console.log('server 2 listening on *:3001');
