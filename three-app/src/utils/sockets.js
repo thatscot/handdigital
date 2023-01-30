@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 let socket;
 
 export const initiateSocketConnection = () => {
-    socket = io('http://localhost:8080');
+    socket = io('http://localhost:3000');
     console.log(`Connecting socket...`);
 };
 
