@@ -2,6 +2,9 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = express();
 const httpServer = createServer(app);
 const httpServer2 = createServer(app);
@@ -9,7 +12,7 @@ const httpServer2 = createServer(app);
 //Three App
 const io = new Server(httpServer, {
   cors: {
-    // origin: "http://localhost:5173",
+    // origin: 'http://localhost:5173',
     origin: process.env.THREE_APP_URL,
     methods: ['GET', 'POST'],
   },
