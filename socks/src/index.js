@@ -12,20 +12,12 @@ const httpServer2 = createServer(app);
 //Three App
 const io = new Server(httpServer, {
   cors: {
-    // origin: 'http://localhost:5173',
-    origin: process.env.THREE_APP_URL,
+    // origin: ['http://localhost:5000', 'http://localhost:5173'],
+    origin: [process.env.THREE_APP_URL, process.env.HANDS_APP_URL],
     methods: ['GET', 'POST'],
   },
 });
 
-// Hand App
-const io2 = new Server(httpServer2, {
-  cors: {
-    // origin: 'http://localhost:5000',
-    origin: process.env.HANDS_APP_URL,
-    methods: ['GET', 'POST'],
-  },
-});
 const directions = [
   'up',
   'down',
@@ -52,7 +44,7 @@ app.get('/move/:direction', (req, res) => {
   }
 });
 
-io2.on('connection', (socket) => {
+io.on('connection', (socket) => {
   socket.on('command', (msg) => {
     console.log('Message Received From: ', 'Hand Gesture App ', msg);
     const { name, lifecycle } = msg;
@@ -60,12 +52,6 @@ io2.on('connection', (socket) => {
   });
 });
 
-// httpServer.listen(3000, () => {
-//   console.log('listening on *:3000');
-// });
-httpServer.listen(process.env.PORT, () => {
-  console.log('listening on ', process.env.PORT);
-});
-httpServer2.listen(3001, () => {
-  console.log('server 2 listening on *:3001');
+httpServer.listen(process.env.PORT || '3000', () => {
+  console.log('listening on *:3000');
 });
