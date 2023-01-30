@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
-import { disconnectSocket, initiateSocketConnection, onMessageHandler } from '../utils/sockets';
+import { disconnectSocket, initiateSocketConnection, onMessageHandler, onConnect, onDisconnect } from '../utils/sockets';
 
 export const Player = () => {
   const playerRef = useRef(null);
@@ -16,6 +16,9 @@ export const Player = () => {
   useEffect(() => {
 
     initiateSocketConnection();
+
+    onConnect(setIsConnected);
+    onDisconnect(setIsConnected);
 
     onMessageHandler(setAction);
 
