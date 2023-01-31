@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
 import * as THREE from 'three';
+import { useTexture } from "@react-three/drei";
 import { useFrame } from '@react-three/fiber';
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import andLogo from "../assets/ANDLogo.jpg";
 
 THREE.ColorManagement.legacyMode = false
 
@@ -10,7 +12,7 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const limeMaterial = new THREE.MeshStandardMaterial({ color: 'lime' });
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 'cornflowerblue' });
 const redMaterial = new THREE.MeshStandardMaterial({ color: 'orangered' });
-const greyMaterial = new THREE.MeshStandardMaterial({ color: 'lightslategrey' }); // transparent: true, opacity: 0.1
+const greyMaterial = new THREE.MeshStandardMaterial({ color: 'lightslategrey' });
 
 const blockLength = 4;
 
@@ -119,6 +121,9 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
 
 const Bounds = ({ length = 1 }) => {
 
+    const texture = useTexture(andLogo);
+    const andMaterial = new THREE.MeshStandardMaterial({ map: texture });
+
     return (
         <>
             <RigidBody type='fixed' restitution={0} friction={0}>
@@ -138,7 +143,7 @@ const Bounds = ({ length = 1 }) => {
                 <mesh
                     position={[0, 2, -(length * 4) + 2]}
                     geometry={boxGeometry}
-                    material={greyMaterial}
+                    material={andMaterial}
                     scale={[blockLength, blockLength, 0.3]}
                     receiveShadow
                 />

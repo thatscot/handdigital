@@ -5,16 +5,20 @@ import { Physics, Debug } from '@react-three/rapier';
 import { Lights } from './components/Lights';
 import { Level } from './components/Level';
 import { Player } from './components/Player';
+import { Interface } from './components/Interface';
 
 export default function App() {
   return (
+    <>
     <Canvas shadows camera={{ fov: 45 }}>
       <Physics gravity={[0, 0, 0]}>
         <Lights />
         <Level />
         <Player />
-        <Debug />
+        {/* <Debug /> */}
       </Physics>
     </Canvas>
+    <Interface />
+    </>
   );
 }

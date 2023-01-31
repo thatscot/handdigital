@@ -8,7 +8,7 @@ import { Drone } from './Drone';
 export const Player = () => {
   const playerRef = useRef(null);
 
-  const [smoothCameraPosition] = useState(() => new THREE.Vector3());
+  const [smoothCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
 
   const [action, setAction] = useState({
