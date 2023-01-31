@@ -1,10 +1,14 @@
 name: Fly Deploy
 on:
   push:
+    paths:
+      - 'socks/**'
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
+    paths:
+      - 'socks/**'
     branches:
       - main
 env:
