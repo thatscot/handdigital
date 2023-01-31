@@ -3,9 +3,13 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { disconnectSocket, initiateSocketConnection, onMessageHandler, onConnect, onDisconnect } from '../utils/sockets';
+import { Drone } from './Drone';
 
 export const Player = () => {
   const playerRef = useRef(null);
+
+  const [smoothCameraPosition] = useState(() => new THREE.Vector3());
+  const [smoothCameraTarget] = useState(() => new THREE.Vector3());
 
   const [isConnected, setIsConnected] = useState(false);
   const [action, setAction] = useState({
@@ -114,23 +118,24 @@ export const Player = () => {
     cameraTarget.copy(playerPosition);
     cameraTarget.y += 0.25;
 
-    state.camera.position.copy(cameraPosition);
-    state.camera.lookAt(cameraTarget);
+    smoothCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothCameraTarget.lerp(cameraTarget, 5 * delta);
+
+    state.camera.position.copy(smoothCameraPosition);
+    state.camera.lookAt(smoothCameraTarget);
   });
 
   return (
     <RigidBody
       ref={playerRef}
+      colliders={'hull'}
       lockRotations
       linearDamping={1}
       position={[0, 1, 0]}
       restitution={0}
       friction={0}
     >
-      <mesh castShadow>
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color="hotpink" />
-      </mesh>
+      <Drone scale={[0.1, 0.1, 0.1]}/> 
     </RigidBody>
   );
 };
