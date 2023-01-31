@@ -11,7 +11,6 @@ export const Player = () => {
   const [smoothCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
 
-  const [isConnected, setIsConnected] = useState(false);
   const [action, setAction] = useState({
     name: undefined,
     lifecycle: undefined,
@@ -21,8 +20,8 @@ export const Player = () => {
 
     initiateSocketConnection();
 
-    onConnect(setIsConnected);
-    onDisconnect(setIsConnected);
+    onConnect();
+    onDisconnect();
 
     onMessageHandler(setAction);
 
@@ -43,7 +42,6 @@ export const Player = () => {
     const playerPosition = playerRef.current.translation();
 
     if (lifecycle === 'end') {
-      console.log('stop');
       playerRef.current.setTranslation({
         x: playerPosition.x,
         y: playerPosition.y,
@@ -52,7 +50,6 @@ export const Player = () => {
     } else if (lifecycle === 'start') {
       switch (name) {
         case 'forward': {
-          console.log('forward');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y,
@@ -61,7 +58,6 @@ export const Player = () => {
           break;
         }
         case 'backward': {
-          console.log('back');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y,
@@ -70,7 +66,6 @@ export const Player = () => {
           break;
         }
         case 'up': {
-          console.log('up');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y + velocity,
@@ -79,7 +74,6 @@ export const Player = () => {
           break;
         }
         case 'down': {
-          console.log('down');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y - velocity,
@@ -88,7 +82,6 @@ export const Player = () => {
           break;
         }
         case 'left': {
-          console.log('left');
           playerRef.current.setTranslation({
             x: playerPosition.x - velocity,
             y: playerPosition.y,
@@ -97,7 +90,6 @@ export const Player = () => {
           break;
         }
         case 'right': {
-          console.log('right');
           playerRef.current.setTranslation({
             x: playerPosition.x + velocity,
             y: playerPosition.y,
@@ -135,7 +127,7 @@ export const Player = () => {
       restitution={0}
       friction={0}
     >
-      <Drone scale={[0.1, 0.1, 0.1]}/> 
+      <Drone scale={[0.1, 0.1, 0.1]} />
     </RigidBody>
   );
 };

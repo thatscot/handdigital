@@ -3,17 +3,15 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 let socket;
 
-export const onConnect = (setIsConnected) => {
+export const onConnect = () => {
   socket.on('connect', () => {
     console.log('Socket Connected ...');
-    setIsConnected(true);
   });
 };
 
-export const onDisconnect = (setIsConnected) => {
+export const onDisconnect = () => {
   socket.on('disconnect', () => {
     console.log('Socket Disconnected ... ...');
-    setIsConnected(false);
   });
 };
 
