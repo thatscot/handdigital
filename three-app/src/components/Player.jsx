@@ -3,11 +3,14 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
 import { disconnectSocket, initiateSocketConnection, onMessageHandler, onConnect, onDisconnect } from '../utils/sockets';
+import { Drone } from './Drone';
 
 export const Player = () => {
   const playerRef = useRef(null);
 
-  const [isConnected, setIsConnected] = useState(false);
+  const [smoothCameraPosition] = useState(() => new THREE.Vector3());
+  const [smoothCameraTarget] = useState(() => new THREE.Vector3());
+
   const [action, setAction] = useState({
     name: undefined,
     lifecycle: undefined,
@@ -17,8 +20,8 @@ export const Player = () => {
 
     initiateSocketConnection();
 
-    onConnect(setIsConnected);
-    onDisconnect(setIsConnected);
+    onConnect();
+    onDisconnect();
 
     onMessageHandler(setAction);
 
@@ -39,7 +42,6 @@ export const Player = () => {
     const playerPosition = playerRef.current.translation();
 
     if (lifecycle === 'end') {
-      console.log('stop');
       playerRef.current.setTranslation({
         x: playerPosition.x,
         y: playerPosition.y,
@@ -48,7 +50,6 @@ export const Player = () => {
     } else if (lifecycle === 'start') {
       switch (name) {
         case 'forward': {
-          console.log('forward');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y,
@@ -57,7 +58,6 @@ export const Player = () => {
           break;
         }
         case 'backward': {
-          console.log('back');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y,
@@ -66,7 +66,6 @@ export const Player = () => {
           break;
         }
         case 'up': {
-          console.log('up');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y + velocity,
@@ -75,7 +74,6 @@ export const Player = () => {
           break;
         }
         case 'down': {
-          console.log('down');
           playerRef.current.setTranslation({
             x: playerPosition.x,
             y: playerPosition.y - velocity,
@@ -84,7 +82,6 @@ export const Player = () => {
           break;
         }
         case 'left': {
-          console.log('left');
           playerRef.current.setTranslation({
             x: playerPosition.x - velocity,
             y: playerPosition.y,
@@ -93,7 +90,6 @@ export const Player = () => {
           break;
         }
         case 'right': {
-          console.log('right');
           playerRef.current.setTranslation({
             x: playerPosition.x + velocity,
             y: playerPosition.y,
@@ -114,23 +110,24 @@ export const Player = () => {
     cameraTarget.copy(playerPosition);
     cameraTarget.y += 0.25;
 
-    state.camera.position.copy(cameraPosition);
-    state.camera.lookAt(cameraTarget);
+    smoothCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothCameraTarget.lerp(cameraTarget, 5 * delta);
+
+    state.camera.position.copy(smoothCameraPosition);
+    state.camera.lookAt(smoothCameraTarget);
   });
 
   return (
     <RigidBody
       ref={playerRef}
+      colliders={'hull'}
       lockRotations
       linearDamping={1}
       position={[0, 1, 0]}
       restitution={0}
       friction={0}
     >
-      <mesh castShadow>
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color="hotpink" />
-      </mesh>
+      <Drone scale={[0.1, 0.1, 0.1]} />
     </RigidBody>
   );
 };

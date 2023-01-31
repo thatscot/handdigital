@@ -10,7 +10,7 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const limeMaterial = new THREE.MeshStandardMaterial({ color: 'lime' });
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 'cornflowerblue' });
 const redMaterial = new THREE.MeshStandardMaterial({ color: 'orangered' });
-const greyMaterial = new THREE.MeshStandardMaterial({ color: 'lightslategrey' });
+const greyMaterial = new THREE.MeshStandardMaterial({ color: 'lightslategrey' }); // transparent: true, opacity: 0.1
 
 const blockLength = 4;
 
@@ -143,9 +143,24 @@ const Bounds = ({ length = 1 }) => {
                     receiveShadow
                 />
             </RigidBody>
+            {/* Floor Boundary */}
             <CuboidCollider
                 args={[2, 0.1, 2 * length]}
                 position={[0, -0.1, -(length * 2) + 2]}
+                restitution={0}
+                friction={0}
+            />
+            {/* Ceiling Boundary */}
+            <CuboidCollider
+                args={[2, 0.1, 2 * length]}
+                position={[0, 3.9, -(length * 2) + 2]}
+                restitution={0}
+                friction={0}
+            />
+            {/* Start Wall Boundary */}
+            <CuboidCollider
+                args={[blockLength, blockLength, 0.3]}
+                position={[0, 0, 2]}
                 restitution={0}
                 friction={0}
             />
