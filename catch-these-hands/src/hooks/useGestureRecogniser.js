@@ -1,9 +1,12 @@
-import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";
-import { useState, useEffect } from "react";
+import { FilesetResolver, GestureRecognizer } from '@mediapipe/tasks-vision';
+import { useState, useEffect } from 'react';
 
-const MODEL_PATH = "src/assets/models/gesture_recognizer.task";
+const MODEL_PATH = new URL(
+  '../assets/gesture_recognizer.task',
+  import.meta.url,
+);
 
-const useGestureRecogniser = ({ numHands = 1, runningMode = "video" } = {}) => {
+const useGestureRecogniser = ({ numHands = 1, runningMode = 'video' } = {}) => {
   const [gestureRecogniser, setGestureRecogniser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -11,7 +14,7 @@ const useGestureRecogniser = ({ numHands = 1, runningMode = "video" } = {}) => {
     async function getGestureRecogniser() {
       setIsLoading(true);
       const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm',
       );
       const gestureRecogniser = await GestureRecognizer.createFromOptions(
         vision,
@@ -21,7 +24,7 @@ const useGestureRecogniser = ({ numHands = 1, runningMode = "video" } = {}) => {
           },
           numHands,
           runningMode,
-        }
+        },
       );
       setGestureRecogniser(gestureRecogniser);
       setIsLoading(false);
