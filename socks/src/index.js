@@ -9,8 +9,8 @@ const httpServer2 = createServer(app);
 //Three App
 const io = new Server(httpServer, {
   cors: {
-    // origin: "http://localhost:5173",
-    origin: process.env.THREE_APP_URL,
+    origin: "http://localhost:5173",
+    // origin: process.env.THREE_APP_URL,
     methods: ['GET', 'POST'],
   },
 });
@@ -18,8 +18,8 @@ const io = new Server(httpServer, {
 // Hand App
 const io2 = new Server(httpServer2, {
   cors: {
-    // origin: 'http://localhost:5000',
-    origin: process.env.HANDS_APP_URL,
+    origin: 'http://localhost:5000',
+    // origin: process.env.HANDS_APP_URL,
     methods: ['GET', 'POST'],
   },
 });

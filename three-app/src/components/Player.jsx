@@ -48,8 +48,16 @@ export const Player = () => {
 
     const velocity = 5 * delta;
     const playerPosition = playerRef.current.translation();
+    console.log(playerPosition);
 
-    if (lifecycle === 'end') {
+    if(playerPosition.z < -17.6){
+      console.log('reset');
+      playerRef.current.setTranslation({
+        x: 0,
+        y: 1,
+        z: 0,
+      });
+    } else if (lifecycle === 'end') {
       console.log('stop');
       playerRef.current.setTranslation({
         x: playerPosition.x,
