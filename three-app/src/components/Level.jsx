@@ -1,29 +1,30 @@
-import React, { useRef } from 'react';
-import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
-import { RigidBody, CuboidCollider } from '@react-three/rapier';
+import React, { useRef } from "react";
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
+import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { useGameContext } from "../hooks";
 
 THREE.ColorManagement.legacyMode = false;
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 
-const limeMaterial = new THREE.MeshStandardMaterial({ color: 'lime' });
+const limeMaterial = new THREE.MeshStandardMaterial({ color: "lime" });
 const transparentRedMaterial = new THREE.MeshStandardMaterial({
-  color: 'red',
+  color: "red",
   opacity: 0.6,
   transparent: true,
 });
 const blueMaterial = new THREE.MeshStandardMaterial({
-  color: 'cornflowerblue',
+  color: "cornflowerblue",
 });
-const redMaterial = new THREE.MeshStandardMaterial({ color: 'orangered' });
+const redMaterial = new THREE.MeshStandardMaterial({ color: "orangered" });
 const greyMaterial = new THREE.MeshStandardMaterial({
-  color: 'lightslategrey',
+  color: "lightslategrey",
 });
 
 const blockLength = 4;
 
-export const SpinnnerObstacle = ({ position = [0, 0, 0] }) => {
+export const SpinnnerObstacle = ({ position = [0, 0, 0], onCollision }) => {
   const obstacleRef = useRef();
 
   useFrame((state) => {
@@ -46,6 +47,7 @@ export const SpinnnerObstacle = ({ position = [0, 0, 0] }) => {
         receiveShadow
       />
       <RigidBody
+        onCollisionEnter={onCollision}
         ref={obstacleRef}
         type="kinematicPosition"
         position={[0, 2, 0]}
@@ -64,7 +66,7 @@ export const SpinnnerObstacle = ({ position = [0, 0, 0] }) => {
   );
 };
 
-export const VerticalObstacle = ({ position = [0, 0, 0] }) => {
+export const VerticalObstacle = ({ position = [0, 0, 0], onCollision }) => {
   const obstacleRef = useRef();
 
   useFrame((state) => {
@@ -96,6 +98,7 @@ export const VerticalObstacle = ({ position = [0, 0, 0] }) => {
         position={[0, 2, 0]}
         restitution={0}
         friction={0}
+        onCollisionEnter={onCollision}
       >
         <mesh
           geometry={boxGeometry}
@@ -109,7 +112,7 @@ export const VerticalObstacle = ({ position = [0, 0, 0] }) => {
   );
 };
 
-export const HorizontalObstacle = ({ position = [0, 0, 0] }) => {
+export const HorizontalObstacle = ({ position = [0, 0, 0], onCollision }) => {
   const obstacleRef = useRef();
 
   useFrame((state) => {
@@ -141,6 +144,7 @@ export const HorizontalObstacle = ({ position = [0, 0, 0] }) => {
         position={[0, 0.3, 0]}
         restitution={0}
         friction={0}
+        onCollisionEnter={onCollision}
       >
         <mesh
           geometry={boxGeometry}
@@ -176,41 +180,6 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
         material={limeMaterial}
         position={[0, -0.1, 0]}
         scale={[4, 0.2, 4]}
-        receiveShadow
-      />
-    </group>
-  );
-};
-
-const HoleWall = () => {
-  return (
-    <group>
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[0, 4, -3]}
-        scale={[2, 3, 2]}
-        receiveShadow
-      />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[2, 1, -3]}
-        scale={[2, 8, 2]}
-        receiveShadow
-      />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[-2, 1, -3]}
-        scale={[2, 8, 2]}
-        receiveShadow
-      />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[0, 0, -3]}
-        scale={[2, 3, 2]}
         receiveShadow
       />
     </group>
@@ -269,14 +238,15 @@ const Bounds = ({ length = 1 }) => {
 
 export const Level = () => {
   const levelLength = 5;
+  const { deductLife } = useGameContext();
 
   return (
     <>
       <StartBlock position={[0, 0, 0]} />
       <HoleWall />
-      <HorizontalObstacle position={[0, 0, -4]} />
-      <VerticalObstacle position={[0, 0, -8]} />
-      <SpinnnerObstacle position={[0, 0, -12]} />
+      <HorizontalObstacle position={[0, 0, -4]} onCollision={deductLife} />
+      <VerticalObstacle position={[0, 0, -8]} onCollision={deductLife} />
+      <SpinnnerObstacle position={[0, 0, -12]} onCollision={deductLife} />
       <EndBlock position={[0, 0, -16]} />
       <Bounds length={levelLength} />
     </>

@@ -23,7 +23,20 @@ body {
   position: fixed;
   overflow: hidden;
   overscroll-behavior-y: none;
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial,
-      sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
+    helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
   color: black;
+}
+
+.game-stats {
+  position: absolute;
+  bottom: 0;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 2rem);
+  gap: 1rem;
+}
+
+.game-stats span {
+  font-size: 2rem;
 }
