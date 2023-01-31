@@ -2,7 +2,7 @@ const PADDING = 5;
 
 const drawLandmarks = (ctx, result) => {
   const { width, height } = ctx.canvas;
-  ctx.fillStyle = "white";
+  ctx.fillStyle = 'white';
   result.landmarks.forEach((landmark) => {
     landmark.forEach((pos) => {
       const { x, y } = pos;
@@ -11,15 +11,11 @@ const drawLandmarks = (ctx, result) => {
   });
 };
 
-const resetCtxStyle = (ctx) => {
-  ctx.strokeStyle = "#646cff";
-};
-
 const drawBoundingBox = (ctx, result) => {
   const { width, height } = ctx.canvas;
-  ctx.strokeStyle = "#646cff";
+  ctx.strokeStyle = '#646cff';
 
-  result.landmarks.forEach((landmarks, index) => {
+  result.landmarks.forEach((landmarks) => {
     const { minX, minY, maxX, maxY } = landmarks.reduce(
       (acc, { x, y }) => {
         if (x < acc.minX) acc.minX = x;
@@ -40,12 +36,7 @@ const drawBoundingBox = (ctx, result) => {
     const adjustedBoxWidth = width * boxWidth + PADDING * 2;
     const adjustedBoxHeight = height * boxHeight + PADDING * 2;
 
-    ctx.strokeRect(
-      adjustedMinX,
-      adjustedMinY,
-      adjustedBoxWidth,
-      adjustedBoxHeight
-    );
+    ctx.strokeRect(adjustedMinX, adjustedMinY, adjustedBoxWidth, adjustedBoxHeight);
   });
 };
 
@@ -54,12 +45,12 @@ async function predictWebcam({
   video,
   canvasCtx,
   handleNewCommand,
-  previousCommand,
+  previousCommand
 }) {
   let nowInMs = Date.now();
   const results = await gestureRecogniser.recognizeForVideo(video, nowInMs);
   const newCommand = results.gestures?.[0]?.[0];
-  const commandName = newCommand?.categoryName ?? "None";
+  const commandName = newCommand?.categoryName ?? 'None';
   handleNewCommand(previousCommand, commandName);
 
   canvasCtx.save();
@@ -74,7 +65,7 @@ async function predictWebcam({
       video,
       canvasCtx,
       previousCommand: commandName,
-      handleNewCommand,
+      handleNewCommand
     })
   );
 
@@ -82,7 +73,7 @@ async function predictWebcam({
 }
 
 function formatLabel(term) {
-  return term.split("_").join(" ");
+  return term.split('_').join(' ');
 }
 
 export { drawBoundingBox, drawLandmarks, predictWebcam, formatLabel };

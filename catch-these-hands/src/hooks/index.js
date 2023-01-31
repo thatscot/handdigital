@@ -1,3 +1,3 @@
-export { useGestureRecogniser } from "./useGestureRecogniser";
-export { useGetUserMedia } from "./useGetUserMedia";
-export { useSocket } from "./useSocket";
+export { useGestureRecogniser } from './useGestureRecogniser';
+export { useGetUserMedia } from './useGetUserMedia';
+export { useSocket } from './useSocket';

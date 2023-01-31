@@ -1,22 +1,21 @@
-import { useState } from "react";
-import { useGetUserMedia } from "./hooks";
-import { formatLabel } from "./utils";
-import { CONTROL_MAP, EMOJI_MAP, VID_DIMENSIONS } from "./constants";
-import "./App.css";
-import { GestureCamera } from "./components/GestureCamera";
+import { useState } from 'react';
+import { useGetUserMedia } from './hooks';
+import { formatLabel } from './utils';
+import { CONTROL_MAP, EMOJI_MAP, VID_DIMENSIONS } from './constants';
+import './App.css';
+import { GestureCamera } from './components/GestureCamera';
 
 function App() {
-  const [recogniserEnabled, setRecogniserEnabled] = useState(true);
-  const [activeGesture, setActiveGesture] = useState("None");
+  const [activeGesture, setActiveGesture] = useState('None');
 
   const {
     stream,
     isLoading: isUserMediaLoading,
-    isError,
+    isError
   } = useGetUserMedia({
     constraints: {
-      video: { width: VID_DIMENSIONS.WIDTH, height: VID_DIMENSIONS.HEIGHT },
-    },
+      video: { width: VID_DIMENSIONS.WIDTH, height: VID_DIMENSIONS.HEIGHT }
+    }
   });
 
   const displayUserMedia = stream && !isUserMediaLoading && !isError;
@@ -27,11 +26,7 @@ function App() {
       <div className="view-container">
         <div className="video-view">
           {displayUserMedia && (
-            <GestureCamera
-              stream={stream}
-              setActiveCommand={setActiveGesture}
-              recogniserEnabled={recogniserEnabled}
-            />
+            <GestureCamera stream={stream} setActiveCommand={setActiveGesture} />
           )}
           <div className="gesture-display">{formatLabel(activeGesture)}</div>
         </div>
@@ -40,7 +35,7 @@ function App() {
             <legend>Controls</legend>
             {[...CONTROL_MAP.entries()].map(
               ([key, value]) =>
-                value !== "none" && (
+                value !== 'none' && (
                   <>
                     <span>{EMOJI_MAP.get(key)}</span>
                     <span>{value}</span>
