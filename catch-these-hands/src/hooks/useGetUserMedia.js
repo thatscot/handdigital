@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 function useGetUserMedia({ constraints }) {
   const [stream, setStream] = useState(undefined);
@@ -7,11 +7,9 @@ function useGetUserMedia({ constraints }) {
 
   useEffect(() => {
     async function getStream() {
-      if (!!navigator.mediaDevices?.getUserMedia) {
+      if (navigator.mediaDevices?.getUserMedia) {
         navigator.mediaDevices.getUserMedia(constraints);
-        const userMedia = await navigator.mediaDevices.getUserMedia(
-          constraints
-        );
+        const userMedia = await navigator.mediaDevices.getUserMedia(constraints);
         setStream(userMedia);
         setIsLoading(false);
       } else {

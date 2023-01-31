@@ -14,9 +14,11 @@ const useSocket = () => {
 
   useEffect(() => {
     socket.on('connect', () => {
+      console.log('Connected...');
       setIsConnected(true);
     });
     socket.on('disconnect', () => {
+      console.log('Disconnected...');
       setIsConnected(false);
     });
 
