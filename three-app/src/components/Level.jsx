@@ -10,7 +10,7 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const limeMaterial = new THREE.MeshStandardMaterial({ color: 'lime' });
 const transparentRedMaterial = new THREE.MeshStandardMaterial({
   color: 'red',
-  opacity: 0.6,
+  opacity: 0.3,
   transparent: true,
 });
 const blueMaterial = new THREE.MeshStandardMaterial({
@@ -184,36 +184,52 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
 
 const HoleWall = () => {
   return (
-    <group>
+    <RigidBody type="fixed" restitution={0} friction={0}>
+      <group>
+        <mesh
+          geometry={boxGeometry}
+          material={transparentRedMaterial}
+          position={[0, 3.5, -3]}
+          scale={[2, 1, 2]}
+          receiveShadow
+        />
+        <mesh
+          geometry={boxGeometry}
+          material={transparentRedMaterial}
+          position={[1.5, 1, -3]}
+          scale={[1, 6, 2]}
+          receiveShadow
+        />
+        <mesh
+          geometry={boxGeometry}
+          material={transparentRedMaterial}
+          position={[-1.5, 1, -3]}
+          scale={[1, 6, 2]}
+          receiveShadow
+        />
+        <mesh
+          geometry={boxGeometry}
+          material={transparentRedMaterial}
+          position={[0, 0, -3]}
+          scale={[2, 3, 2]}
+          receiveShadow
+        />
+      </group>
+    </RigidBody>
+  );
+};
+
+const HalfWall = () => {
+  return (
+    <RigidBody type="fixed" restitution={0} friction={0}>
       <mesh
         geometry={boxGeometry}
         material={transparentRedMaterial}
-        position={[0, 4, -3]}
-        scale={[2, 3, 2]}
+        position={[0, 2.5, -7.5]}
+        scale={[4.75, 2.75, 0.5]}
         receiveShadow
       />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[2, 1, -3]}
-        scale={[2, 8, 2]}
-        receiveShadow
-      />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[-2, 1, -3]}
-        scale={[2, 8, 2]}
-        receiveShadow
-      />
-      <mesh
-        geometry={boxGeometry}
-        material={transparentRedMaterial}
-        position={[0, 0, -3]}
-        scale={[2, 3, 2]}
-        receiveShadow
-      />
-    </group>
+    </RigidBody>
   );
 };
 
@@ -274,6 +290,7 @@ export const Level = () => {
     <>
       <StartBlock position={[0, 0, 0]} />
       <HoleWall />
+      <HalfWall />
       <HorizontalObstacle position={[0, 0, -4]} />
       <VerticalObstacle position={[0, 0, -8]} />
       <SpinnnerObstacle position={[0, 0, -12]} />
