@@ -11,13 +11,14 @@ import {
 } from "../utils/sockets";
 import { Drone } from "./Drone";
 import { useGameContext } from "../hooks";
+import { GAME_STATE } from "../utils/constants";
 
 export const Player = () => {
   const playerRef = useRef(null);
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
-  const {isGameOver, resetGame, isGameStarted, completeGame} = useGameContext();
+  const { gameState, resetGame, completeGame } = useGameContext();
   const [action, setAction] = useState({
     name: undefined,
     lifecycle: undefined,
@@ -47,17 +48,23 @@ export const Player = () => {
     const velocity = 5 * delta;
     const playerPosition = playerRef.current.translation();
 
-    if(playerPosition.z < -18) {
-      completeGame();
-    }
 
-    if (isGameOver) {
+    if (gameState === GAME_STATE.LOADED) {
+      playerRef.current.setTranslation({ x: 0, y: 1, z: 0 });
+    };
+
+    if (gameState === GAME_STATE.GAME_OVER) {
       playerRef.current.setTranslation({ x: 0, y: 1, z: 0 });
       resetGame();
       return;
     }
 
-    if (isGameStarted) {
+    if (playerPosition.z < -18 && gameState !== GAME_STATE.LOADED) {
+      completeGame();
+    }
+
+
+    if (gameState === GAME_STATE.STARTED) {
       if (lifecycle === "end") {
         playerRef.current.setTranslation({
           x: playerPosition.x,

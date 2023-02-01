@@ -1,32 +1,35 @@
 import { createContext, useContext, useState } from "react";
+import { GAME_STATE } from "../utils/constants";
 
 const GameContext = createContext({});
 
 const GameProvider = ({ children }) => {
   const [lifeCount, setLifeCount] = useState(3);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isGameCompleted, setIsGameCompleted] = useState(false);
+  const [gameState, setIsGameState] = useState(GAME_STATE.LOADED);
+
 
   function startGame() {
-    setIsGameStarted(true);
+    setIsGameState(GAME_STATE.STARTED);
+  };
+
+  function endGame() {
+    setIsGameState(GAME_STATE.GAME_OVER);
   };
 
   function completeGame() {
-    setIsGameCompleted(true);
+    setIsGameState(GAME_STATE.COMPLETED);
+
   };
 
   function resetGame() {
     setLifeCount(3);
-    setIsGameOver(false);
-    setIsGameStarted(false);
-    setIsGameCompleted(false);
+    setIsGameState(GAME_STATE.LOADED);
   };
 
   function deductLife() {
     setLifeCount((prevCount) => {
       if (prevCount === 0) {
-        setIsGameOver(true);
+        endGame();
         return 0;
       }
       return prevCount - 1;
@@ -35,7 +38,7 @@ const GameProvider = ({ children }) => {
 
   return (
     <GameContext.Provider
-      value={{ lifeCount, deductLife, isGameOver, resetGame, isGameStarted, startGame, isGameCompleted, completeGame }}
+      value={{ lifeCount, deductLife, gameState, startGame, endGame, completeGame, resetGame }}
     >
       {children}
     </GameContext.Provider>

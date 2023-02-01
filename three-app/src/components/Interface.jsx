@@ -1,20 +1,18 @@
+import { useState } from 'react';
 import { useElapsedTime } from 'use-elapsed-time';
 import { useGameContext } from "../hooks";
+import { GAME_STATE } from '../utils/constants';
 
 export const Interface = () => {
 
-    const { isGameStarted, startGame, isGameCompleted, resetGame } = useGameContext();
-    
-    let timer = 0;
+    const { gameState, startGame, resetGame } = useGameContext();
 
-    if (isGameStarted) {
-        const { elapsedTime } = useElapsedTime({ isPlaying: true });
-        timer = elapsedTime;
-    };
+    // const { elapsedTime } = useElapsedTime({ isPlaying: isGameStarted && !isGameCompleted });
+
 
     return <div className="interface">
-        { isGameStarted ? <div className="hud"> {timer.toFixed(1)} </div> : null }
-        { !isGameStarted ? <div className="hud" onClick={() => startGame()}>START</div> : null }
-        { isGameCompleted ? <div className="hud" onClick={() => resetGame()}>RESTART</div> : null }
+        {gameState === GAME_STATE.LOADED ? <div className="hud" onClick={() => startGame()}>START</div> : null}
+        {/* {isGameStarted ? <div className="hud"> {elapsedTime.toFixed(1)} </div> : null} */}
+        {gameState === GAME_STATE.COMPLETED ? <div className="hud" onClick={() => resetGame()}>RESTART</div> : null}
     </div>;
 };
