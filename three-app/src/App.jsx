@@ -5,8 +5,10 @@ import { Physics, Debug } from '@react-three/rapier';
 import { Lights } from './components/Lights';
 import { Level } from './components/Level';
 import { Player } from './components/Player';
-import { XR, VRButton } from '@react-three/xr';
+import { XR, VRButton, useXR } from '@react-three/xr';
 export default function App() {
+  console.log(useXR((state) => state));
+
   return (
     <>
       <VRButton />
