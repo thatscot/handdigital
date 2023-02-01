@@ -66,6 +66,8 @@ body,
   display: grid;
   grid-template-columns: repeat(3, 2rem);
   gap: 1rem;
+
+  font-family: 'Bebas Neue', cursive;
 }
 
 .game-stats span {

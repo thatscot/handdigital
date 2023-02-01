@@ -6,7 +6,12 @@ const GameContext = createContext({});
 const GameProvider = ({ children }) => {
   const [lifeCount, setLifeCount] = useState(3);
   const [gameState, setIsGameState] = useState(GAME_STATE.LOADED);
+  const [resetTimer, setIsResetTimer] = useState();
 
+
+  function initialiseTimer(timer) {
+    setIsResetTimer(timer);
+  }
 
   function startGame() {
     setIsGameState(GAME_STATE.STARTED);
@@ -23,6 +28,7 @@ const GameProvider = ({ children }) => {
 
   function resetGame() {
     setLifeCount(3);
+    resetTimer?.();
     setIsGameState(GAME_STATE.LOADED);
   };
 
@@ -38,7 +44,7 @@ const GameProvider = ({ children }) => {
 
   return (
     <GameContext.Provider
-      value={{ lifeCount, deductLife, gameState, startGame, endGame, completeGame, resetGame }}
+      value={{ lifeCount, deductLife, gameState, startGame, endGame, completeGame, resetGame, initialiseTimer }}
     >
       {children}
     </GameContext.Provider>
