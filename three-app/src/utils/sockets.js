@@ -27,7 +27,6 @@ export const disconnectSocket = () => {
 
 export const onMessageHandler = (setAction) => {
   socket.on("message", ({ name, lifecycle }) => {
-    console.log({ command: { name, lifecycle } });
     setAction({ name, lifecycle });
   });
 };

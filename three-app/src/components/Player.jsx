@@ -17,7 +17,7 @@ export const Player = () => {
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
-  const { isGameOver, resetGame } = useGameContext();
+  const {isGameOver, resetGame, isGameStarted, completeGame} = useGameContext();
   const [action, setAction] = useState({
     name: undefined,
     lifecycle: undefined,
@@ -47,70 +47,76 @@ export const Player = () => {
     const velocity = 5 * delta;
     const playerPosition = playerRef.current.translation();
 
+    if(playerPosition.z < -18) {
+      completeGame();
+    }
+
     if (isGameOver) {
       playerRef.current.setTranslation({ x: 0, y: 1, z: 0 });
       resetGame();
       return;
     }
 
-    if (lifecycle === "end") {
-      playerRef.current.setTranslation({
-        x: playerPosition.x,
-        y: playerPosition.y,
-        z: playerPosition.z,
-      });
-    } else if (lifecycle === "start") {
-      switch (name) {
-        case "forward": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x,
-            y: playerPosition.y,
-            z: playerPosition.z - velocity,
-          });
-          break;
-        }
-        case "backward": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x,
-            y: playerPosition.y,
-            z: playerPosition.z + velocity,
-          });
-          break;
-        }
-        case "up": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x,
-            y: playerPosition.y + velocity,
-            z: playerPosition.z,
-          });
-          break;
-        }
-        case "down": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x,
-            y: playerPosition.y - velocity,
-            z: playerPosition.z,
-          });
-          break;
-        }
-        case "left": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x - velocity,
-            y: playerPosition.y,
-            z: playerPosition.z,
-          });
-          break;
-        }
-        case "right": {
-          playerRef.current.setTranslation({
-            x: playerPosition.x + velocity,
-            y: playerPosition.y,
-            z: playerPosition.z,
-          });
-          break;
+    if (isGameStarted) {
+      if (lifecycle === "end") {
+        playerRef.current.setTranslation({
+          x: playerPosition.x,
+          y: playerPosition.y,
+          z: playerPosition.z,
+        });
+      } else if (lifecycle === "start") {
+        switch (name) {
+          case "forward": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x,
+              y: playerPosition.y,
+              z: playerPosition.z - velocity,
+            });
+            break;
+          }
+          case "backward": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x,
+              y: playerPosition.y,
+              z: playerPosition.z + velocity,
+            });
+            break;
+          }
+          case "up": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x,
+              y: playerPosition.y + velocity,
+              z: playerPosition.z,
+            });
+            break;
+          }
+          case "down": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x,
+              y: playerPosition.y - velocity,
+              z: playerPosition.z,
+            });
+            break;
+          }
+          case "left": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x - velocity,
+              y: playerPosition.y,
+              z: playerPosition.z,
+            });
+            break;
+          }
+          case "right": {
+            playerRef.current.setTranslation({
+              x: playerPosition.x + velocity,
+              y: playerPosition.y,
+              z: playerPosition.z,
+            });
+            break;
+          }
         }
       }
-    }
+    };
 
     // Camera
     const cameraPosition = new THREE.Vector3();

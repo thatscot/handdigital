@@ -5,6 +5,7 @@ import { Level } from "./components/Level";
 import { Player } from "./components/Player";
 import { GameProvider } from "./hooks";
 import { Statistics } from "./components/Statistics";
+import { Interface } from "./components/Interface";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Debug />
         </Physics>
       </Canvas>
+      <Interface />
       <Statistics />
     </GameProvider>
   );

@@ -184,37 +184,48 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
     );
 };
 
-const HoleWall = () => {
+const HoleWall = ({ position = [0, 0, 0], onCollision }) => {
     return (
-        <group>
+        <group position={position}>
             <mesh
                 geometry={boxGeometry}
-                material={transparentRedMaterial}
-                position={[0, 4, -3]}
-                scale={[2, 3, 2]}
+                material={blueMaterial}
+                position={[0, -0.1, 0]}
+                scale={[4, 0.2, 4]}
                 receiveShadow
+            />
+            <RigidBody
+                type="kinematicPosition"
+                position={[0, 0, 0]}
+                restitution={0}
+                friction={0}
+                onCollisionEnter={onCollision}
+            >
+            <mesh
+                geometry={boxGeometry}
+                material={redMaterial}
+                position={[0, 0.5, 0]}
+                scale={[4, 1, 0.3]}
             />
             <mesh
                 geometry={boxGeometry}
-                material={transparentRedMaterial}
-                position={[2, 1, -3]}
-                scale={[2, 8, 2]}
-                receiveShadow
+                material={redMaterial}
+                position={[1.5, 2, 0]}
+                scale={[1, 4, 0.3]}
             />
             <mesh
                 geometry={boxGeometry}
-                material={transparentRedMaterial}
-                position={[-2, 1, -3]}
-                scale={[2, 8, 2]}
-                receiveShadow
+                material={redMaterial}
+                position={[-1.5, 2, 0]}
+                scale={[1, 4, 0.3]}
             />
             <mesh
                 geometry={boxGeometry}
-                material={transparentRedMaterial}
-                position={[0, 0, -3]}
-                scale={[2, 3, 2]}
-                receiveShadow
+                material={redMaterial}
+                position={[0, 3.5, 0]}
+                scale={[4, 1, 0.3]}
             />
+            </RigidBody>
         </group>
     );
 };
@@ -270,17 +281,17 @@ const Bounds = ({ length = 1 }) => {
 };
 
 export const Level = () => {
-    const levelLength = 5;
+    const levelLength = 6;
     const { deductLife } = useGameContext();
 
     return (
         <>
             <StartBlock position={[0, 0, 0]} />
-            <HoleWall />
-            <HorizontalObstacle position={[0, 0, -4]} onCollision={deductLife} />
+            <HoleWall position={[0, 0, -4]} onCollision={deductLife} />
             <VerticalObstacle position={[0, 0, -8]} onCollision={deductLife} />
             <SpinnnerObstacle position={[0, 0, -12]} onCollision={deductLife} />
-            <EndBlock position={[0, 0, -16]} />
+            <HorizontalObstacle position={[0, 0, -16]} onCollision={deductLife} />
+            <EndBlock position={[0, 0, -20]} />
             <Bounds length={levelLength} />
         </>
     );

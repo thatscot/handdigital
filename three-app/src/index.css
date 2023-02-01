@@ -42,6 +42,23 @@ body,
   text-align: left;
 }
 
+.hud {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10%;
+  left: 36%;
+  width: 25%;
+  color: white;
+  font-size: 8vh;
+  white-space: pre-line;
+  background-color: black;
+  opacity: 0.5;
+  padding: 8px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 .game-stats {
   position: absolute;
   bottom: 0;
