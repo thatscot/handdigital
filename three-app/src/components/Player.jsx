@@ -20,6 +20,7 @@ export const Player = () => {
   const {
     state: { player },
   } = useXR((state) => state);
+  console.log(player);
 
   const [action, setAction] = useState({
     name: undefined,
@@ -124,7 +125,9 @@ export const Player = () => {
 
     state.camera.position.copy(smoothCameraPosition);
     state.camera.lookAt(smoothCameraTarget);
-    player.position.copy(smoothCameraPosition);
+    if (player) {
+      player.position.copy(smoothCameraPosition);
+    }
     // setCameraPos(state.camera.position);
   });
 
