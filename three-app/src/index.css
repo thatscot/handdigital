@@ -31,9 +31,9 @@ body,
   display: grid;
   place-items: center;
   position: absolute;
-  top: 0;
+  bottom: 5rem;
   left: 0;
-  width: 100%;
+  width: 10rem;
   color: white;
   background-color: black;
   opacity: 0.5;
@@ -42,7 +42,7 @@ body,
   text-align: left;
 }
 
-.hud {
+.menu {
   display: flex;
   justify-content: center;
   position: absolute;
