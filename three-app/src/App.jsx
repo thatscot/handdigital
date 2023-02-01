@@ -5,16 +5,21 @@ import { Physics, Debug } from '@react-three/rapier';
 import { Lights } from './components/Lights';
 import { Level } from './components/Level';
 import { Player } from './components/Player';
-
+import { XR, VRButton } from '@react-three/xr';
 export default function App() {
   return (
-    <Canvas shadows camera={{ fov: 45 }}>
-      <Physics gravity={[0, 0, 0]}>
-        <Lights />
-        <Level />
-        <Player />
-        <Debug />
-      </Physics>
-    </Canvas>
+    <>
+      <VRButton />
+      <Canvas shadows camera={{ fov: 45 }}>
+        <XR>
+          <Physics gravity={[0, 0, 0]}>
+            <Lights />
+            <Level />
+            <Player />
+            <Debug />
+          </Physics>
+        </XR>
+      </Canvas>
+    </>
   );
 }
