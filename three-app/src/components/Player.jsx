@@ -14,7 +14,6 @@ import { useXR } from '@react-three/xr';
 
 export const Player = () => {
   const playerRef = useRef(null);
-  console.log(useXR((state) => state));
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
@@ -119,6 +118,8 @@ export const Player = () => {
 
     smoothCameraPosition.lerp(cameraPosition, 5 * delta);
     smoothCameraTarget.lerp(cameraTarget, 5 * delta);
+
+    useXR((state) => state.player.position.copy(smoothCameraPosition));
 
     state.camera.position.copy(smoothCameraPosition);
     state.camera.lookAt(smoothCameraTarget);
