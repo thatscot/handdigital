@@ -2,7 +2,7 @@ const PADDING = 5;
 
 const drawLandmarks = (ctx, result) => {
   const { width, height } = ctx.canvas;
-  ctx.fillStyle = "#2d2d2d";
+  ctx.fillStyle = 'white';
   result.landmarks.forEach((landmark) => {
     landmark.forEach((pos) => {
       const { x, y } = pos;
@@ -11,18 +11,11 @@ const drawLandmarks = (ctx, result) => {
   });
 };
 
-const resetCtxStyle = (ctx) => {
-  ctx.strokeStyle = "#2d2d2d";
-  ctx.fillStyle = "#2d2d2d";
-  ctx.font = "15px sans-serif";
-};
-
 const drawBoundingBox = (ctx, result) => {
   const { width, height } = ctx.canvas;
+  ctx.strokeStyle = '#646cff';
 
-  result.landmarks.forEach((landmarks, index) => {
-    resetCtxStyle(ctx);
-
+  result.landmarks.forEach((landmarks) => {
     const { minX, minY, maxX, maxY } = landmarks.reduce(
       (acc, { x, y }) => {
         if (x < acc.minX) acc.minX = x;
@@ -43,21 +36,7 @@ const drawBoundingBox = (ctx, result) => {
     const adjustedBoxWidth = width * boxWidth + PADDING * 2;
     const adjustedBoxHeight = height * boxHeight + PADDING * 2;
 
-    const adjustedMaxY = height * maxY + PADDING;
-    ctx.strokeRect(
-      adjustedMinX,
-      adjustedMinY,
-      adjustedBoxWidth,
-      adjustedBoxHeight
-    );
-
-    ctx.fillRect(adjustedMinX, adjustedMaxY, adjustedBoxWidth, 20);
-    ctx.fillStyle = "white";
-    ctx.fillText(
-      result.gestures[index][0].categoryName,
-      adjustedMinX + PADDING,
-      adjustedMaxY + PADDING * 3
-    );
+    ctx.strokeRect(adjustedMinX, adjustedMinY, adjustedBoxWidth, adjustedBoxHeight);
   });
 };
 
@@ -66,12 +45,12 @@ async function predictWebcam({
   video,
   canvasCtx,
   handleNewCommand,
-  previousCommand,
+  previousCommand
 }) {
   let nowInMs = Date.now();
   const results = await gestureRecogniser.recognizeForVideo(video, nowInMs);
   const newCommand = results.gestures?.[0]?.[0];
-  const commandName = newCommand?.categoryName ?? "None";
+  const commandName = newCommand?.categoryName ?? 'None';
   handleNewCommand(previousCommand, commandName);
 
   canvasCtx.save();
@@ -80,19 +59,21 @@ async function predictWebcam({
   drawLandmarks(canvasCtx, results);
   drawBoundingBox(canvasCtx, results);
 
-  window.requestAnimationFrame(() =>
+  const animationHandleID = window.requestAnimationFrame(() =>
     predictWebcam({
       gestureRecogniser,
       video,
       canvasCtx,
       previousCommand: commandName,
-      handleNewCommand,
+      handleNewCommand
     })
   );
+
+  return animationHandleID;
 }
 
 function formatLabel(term) {
-  return term.split("_").join(" ");
+  return term.split('_').join(' ');
 }
 
 export { drawBoundingBox, drawLandmarks, predictWebcam, formatLabel };

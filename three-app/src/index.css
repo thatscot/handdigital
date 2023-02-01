@@ -41,3 +41,16 @@ body,
   padding: 8px;
   text-align: left;
 }
+
+.game-stats {
+  position: absolute;
+  bottom: 0;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 2rem);
+  gap: 1rem;
+}
+
+.game-stats span {
+  font-size: 2rem;
+}

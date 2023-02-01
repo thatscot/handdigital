@@ -1,83 +1,55 @@
-import { useEffect, useRef } from "react";
-import { useGestureRecogniser } from "./hooks/useGestureRecogniser";
-import { useGetUserMedia } from "./hooks/useGetUserMedia";
-import { formatLabel, predictWebcam } from "./utils";
-import { useSocket } from "./hooks/useSocket";
-import { CONTROL_MAP, VID_DIMENSIONS } from "./constants";
-import "./App.css";
+import { useState } from 'react';
+import { useGetUserMedia } from './hooks';
+import { formatLabel } from './utils';
+import { CONTROL_MAP, EMOJI_MAP, VID_DIMENSIONS } from './constants';
+import './App.css';
+import { GestureCamera } from './components/GestureCamera';
 
 function App() {
-  const videoElement = useRef(null);
-  const canvasElement = useRef(null);
-  const canvasCtx = canvasElement.current?.getContext("2d");
-
-  const { sendCommand, isConnected, error } = useSocket();
-
-  const handleNewCommand = (prevCommand, command) => {
-    if (isConnected && !error.message) {
-      if (command !== prevCommand) {
-        if (prevCommand)
-          sendCommand({ name: CONTROL_MAP.get(prevCommand), lifecycle: "end" });
-        sendCommand({ name: CONTROL_MAP.get(command), lifecycle: "start" });
-      }
-    } else {
-      if (error.message) console.log({ error });
-    }
-  };
-
-  const { gestureRecogniser, isLoading: isGestureRecogniserLoading } =
-    useGestureRecogniser();
+  const [activeGesture, setActiveGesture] = useState('None');
 
   const {
     stream,
     isLoading: isUserMediaLoading,
-    isError,
+    isError
   } = useGetUserMedia({
     constraints: {
-      video: { width: VID_DIMENSIONS.WIDTH, height: VID_DIMENSIONS.HEIGHT },
-    },
+      video: { width: VID_DIMENSIONS.WIDTH, height: VID_DIMENSIONS.HEIGHT }
+    }
   });
 
-  if (!isError && !isUserMediaLoading && videoElement.current) {
-    videoElement.current.srcObject = stream;
-  }
-
-  useEffect(() => {
-    if (!isGestureRecogniserLoading) {
-      predictWebcam({
-        gestureRecogniser,
-        video: videoElement.current,
-        canvasCtx,
-        handleNewCommand,
-      });
-    }
-  }, [isGestureRecogniserLoading, gestureRecogniser, videoElement, canvasCtx]);
+  const displayUserMedia = stream && !isUserMediaLoading && !isError;
 
   return (
     <div className="App">
       <h1>Control center</h1>
-      <div className="camera-container">
-        <canvas
-          width={VID_DIMENSIONS.WIDTH}
-          height={VID_DIMENSIONS.HEIGHT}
-          ref={canvasElement}
-        />
-        <video
-          width={VID_DIMENSIONS.WIDTH}
-          height={VID_DIMENSIONS.HEIGHT}
-          ref={videoElement}
-          autoPlay={true}
-        />
+      <div className="view-container">
+        <div className="video-view">
+          {displayUserMedia && (
+            <GestureCamera stream={stream} setActiveCommand={setActiveGesture} />
+          )}
+          <div className="gesture-display">{formatLabel(activeGesture)}</div>
+        </div>
+        <div className="controls">
+          <fieldset>
+            <legend>Controls</legend>
+            {[...CONTROL_MAP.entries()].map(
+              ([key, value]) =>
+                value !== 'none' && (
+                  <>
+                    <span>{EMOJI_MAP.get(key)}</span>
+                    <span>{value}</span>
+                  </>
+                )
+            )}
+          </fieldset>
+          <fieldset>
+            <legend>Settings</legend>
+            <input id="flip" type="checkbox" defaultChecked />
+            <label htmlFor="flip">Flip video</label>
+          </fieldset>
+        </div>
       </div>
-      <fieldset>
-        <legend>Controls</legend>
-        {[...CONTROL_MAP.entries()].map(([key, value]) => (
-          <>
-            <span>{formatLabel(key)}: </span>
-            <span>{value}</span>
-          </>
-        ))}
-      </fieldset>
     </div>
   );
 }

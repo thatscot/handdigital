@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
-import * as THREE from 'three';
+import React, { useRef } from "react";
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { useFrame } from '@react-three/fiber';
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { useGameContext } from "../hooks";
 import andLogo from "../assets/ANDLogo.jpg";
 
 THREE.ColorManagement.legacyMode = false;
@@ -13,15 +14,18 @@ const limeMaterial = new THREE.MeshStandardMaterial({ color: 'lime' });
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 'cornflowerblue' });
 const redMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
 const greyMaterial = new THREE.MeshStandardMaterial({ color: 'lightslategrey' });
+const transparentRedMaterial = new THREE.MeshStandardMaterial({
+    color: "red",
+    opacity: 0.6,
+    transparent: true,
+});
 
 const blockLength = 4;
 
-export const SpinnnerObstacle = ({ position = [0, 0, 0] }) => {
-
+export const SpinnnerObstacle = ({ position = [0, 0, 0], onCollision }) => {
     const obstacleRef = useRef();
 
     useFrame((state) => {
-
         const time = state.clock.getElapsedTime();
         const euler = new THREE.Euler(0, 0, time);
 
@@ -33,66 +37,126 @@ export const SpinnnerObstacle = ({ position = [0, 0, 0] }) => {
 
     return (
         <group position={position}>
-            <mesh geometry={boxGeometry} material={blueMaterial} position={[0, -0.1, 0]} scale={[4, 0.2, 4]} receiveShadow />
-            <RigidBody ref={obstacleRef} type="kinematicPosition" position={[0, 2, 0]} restitution={0} friction={0}>
-                <mesh geometry={boxGeometry} material={redMaterial} scale={[4, 0.3, 0.3]} castShadow receiveShadow />
+            <mesh
+                geometry={boxGeometry}
+                material={blueMaterial}
+                position={[0, -0.1, 0]}
+                scale={[4, 0.2, 4]}
+                receiveShadow
+            />
+            <RigidBody
+                onCollisionEnter={onCollision}
+                ref={obstacleRef}
+                type="kinematicPosition"
+                position={[0, 2, 0]}
+                restitution={0}
+                friction={0}
+            >
+                <mesh
+                    geometry={boxGeometry}
+                    material={redMaterial}
+                    scale={[4, 0.3, 0.3]}
+                    castShadow
+                    receiveShadow
+                />
             </RigidBody>
         </group>
     );
 };
 
-export const VerticalObstacle = ({ position = [0, 0, 0] }) => {
-
+export const VerticalObstacle = ({ position = [0, 0, 0], onCollision }) => {
     const obstacleRef = useRef();
 
     useFrame((state) => {
-
         const time = state.clock.getElapsedTime();
 
-        const verticalMovement = (Math.sin(time) * 1.85) + 2;
+        const verticalMovement = Math.sin(time) * 1.85 + 2;
 
         const [x, y, z] = position;
 
-        obstacleRef.current.setNextKinematicTranslation({ x, y: verticalMovement + y, z });
+        obstacleRef.current.setNextKinematicTranslation({
+            x,
+            y: verticalMovement + y,
+            z,
+        });
     });
 
     return (
         <group position={position}>
-            <mesh geometry={boxGeometry} material={blueMaterial} position={[0, -0.1, 0]} scale={[4, 0.2, 4]} receiveShadow />
-            <RigidBody ref={obstacleRef} type="kinematicPosition" position={[0, 2, 0]} restitution={0} friction={0}>
-                <mesh geometry={boxGeometry} material={redMaterial} scale={[4, 0.3, 0.3]} castShadow receiveShadow />
+            <mesh
+                geometry={boxGeometry}
+                material={blueMaterial}
+                position={[0, -0.1, 0]}
+                scale={[4, 0.2, 4]}
+                receiveShadow
+            />
+            <RigidBody
+                ref={obstacleRef}
+                type="kinematicPosition"
+                position={[0, 2, 0]}
+                restitution={0}
+                friction={0}
+                onCollisionEnter={onCollision}
+            >
+                <mesh
+                    geometry={boxGeometry}
+                    material={redMaterial}
+                    scale={[4, 0.3, 0.3]}
+                    castShadow
+                    receiveShadow
+                />
             </RigidBody>
         </group>
     );
 };
 
-export const HorizontalObstacle = ({ position = [0, 0, 0] }) => {
-
+export const HorizontalObstacle = ({ position = [0, 0, 0], onCollision }) => {
     const obstacleRef = useRef();
 
     useFrame((state) => {
-
         const time = state.clock.getElapsedTime();
 
         const horizontalMovement = Math.sin(time) * 1.85;
 
         const [x, y, z] = position;
 
-        obstacleRef.current.setNextKinematicTranslation({ x: horizontalMovement + x, y: y + 2, z });
+        obstacleRef.current.setNextKinematicTranslation({
+            x: horizontalMovement + x,
+            y: y + 2,
+            z,
+        });
     });
 
     return (
         <group position={position}>
-            <mesh geometry={boxGeometry} material={blueMaterial} position={[0, -0.1, 0]} scale={[4, 0.2, 4]} receiveShadow />
-            <RigidBody ref={obstacleRef} type="kinematicPosition" position={[0, 0.3, 0]} restitution={0} friction={0}>
-                <mesh geometry={boxGeometry} material={redMaterial} scale={[0.3, 4, 0.3]} castShadow receiveShadow />
+            <mesh
+                geometry={boxGeometry}
+                material={blueMaterial}
+                position={[0, -0.1, 0]}
+                scale={[4, 0.2, 4]}
+                receiveShadow
+            />
+            <RigidBody
+                ref={obstacleRef}
+                type="kinematicPosition"
+                position={[0, 0.3, 0]}
+                restitution={0}
+                friction={0}
+                onCollisionEnter={onCollision}
+            >
+                <mesh
+                    geometry={boxGeometry}
+                    material={redMaterial}
+                    scale={[0.3, 4, 0.3]}
+                    castShadow
+                    receiveShadow
+                />
             </RigidBody>
         </group>
     );
 };
 
 const StartBlock = ({ position = [0, 0, 0] }) => {
-
     return (
         <group position={position}>
             <mesh
@@ -100,13 +164,13 @@ const StartBlock = ({ position = [0, 0, 0] }) => {
                 material={limeMaterial}
                 position={[0, -0.1, 0]}
                 scale={[4, 0.2, 4]}
-                receiveShadow />
+                receiveShadow
+            />
         </group>
     );
 };
 
 const EndBlock = ({ position = [0, 0, 0] }) => {
-
     return (
         <group position={position}>
             <mesh
@@ -114,7 +178,8 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
                 material={limeMaterial}
                 position={[0, -0.1, 0]}
                 scale={[4, 0.2, 4]}
-                receiveShadow />
+                receiveShadow
+            />
         </group>
     );
 };
@@ -170,17 +235,18 @@ const Bounds = ({ length = 1 }) => {
 };
 
 export const Level = () => {
-
     const levelLength = 5;
+    const { deductLife } = useGameContext();
 
     return (
         <>
             <StartBlock position={[0, 0, 0]} />
-            <HorizontalObstacle position={[0, 0, -4]} />
-            <VerticalObstacle position={[0, 0, -8]} />
-            <SpinnnerObstacle position={[0, 0, -12]} />
+            <HoleWall />
+            <HorizontalObstacle position={[0, 0, -4]} onCollision={deductLife} />
+            <VerticalObstacle position={[0, 0, -8]} onCollision={deductLife} />
+            <SpinnnerObstacle position={[0, 0, -12]} onCollision={deductLife} />
             <EndBlock position={[0, 0, -16]} />
             <Bounds length={levelLength} />
         </>
-    )
+    );
 };
