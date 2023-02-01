@@ -2,11 +2,19 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
-import { disconnectSocket, initiateSocketConnection, onMessageHandler, onConnect, onDisconnect } from '../utils/sockets';
+import {
+  disconnectSocket,
+  initiateSocketConnection,
+  onMessageHandler,
+  onConnect,
+  onDisconnect,
+} from '../utils/sockets';
 import { Drone } from './Drone';
+import { useXR } from '@react-three/xr';
 
 export const Player = () => {
   const playerRef = useRef(null);
+  console.log(useXR((state) => state));
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
@@ -17,7 +25,6 @@ export const Player = () => {
   });
 
   useEffect(() => {
-
     initiateSocketConnection();
 
     onConnect();

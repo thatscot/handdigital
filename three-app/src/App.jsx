@@ -7,8 +7,6 @@ import { Level } from './components/Level';
 import { Player } from './components/Player';
 import { XR, VRButton, useXR } from '@react-three/xr';
 export default function App() {
-  console.log(useXR((state) => state));
-
   return (
     <>
       <VRButton />
