@@ -17,7 +17,9 @@ export const Player = () => {
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
-  console.log(useXR((state) => state.player));
+  const {
+    state: { player },
+  } = useXR((state) => state);
 
   const [action, setAction] = useState({
     name: undefined,
@@ -120,10 +122,10 @@ export const Player = () => {
     smoothCameraPosition.lerp(cameraPosition, 5 * delta);
     smoothCameraTarget.lerp(cameraTarget, 5 * delta);
 
-    useXR((state) => state.player.position.copy(smoothCameraPosition));
-
     state.camera.position.copy(smoothCameraPosition);
     state.camera.lookAt(smoothCameraTarget);
+    player.position.copy(smoothCameraPosition);
+    // setCameraPos(state.camera.position);
   });
 
   return (
