@@ -10,7 +10,7 @@ export default function App() {
   return (
     <>
       <VRButton />
-      <input type="button"> Click Me</input>
+      <input type={'button'} value={'Click me'} />
       <Canvas shadows camera={{ fov: 45 }}>
         <XR>
           <Physics gravity={[0, 0, 0]}>
