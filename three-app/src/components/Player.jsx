@@ -17,6 +17,7 @@ export const Player = () => {
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3());
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
+  console.log(useXR((state) => state.player));
 
   const [action, setAction] = useState({
     name: undefined,
