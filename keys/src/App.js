@@ -6,9 +6,8 @@ import { useState } from "react";
 function App() {
   const { sendCommand, isConnected, error } = useSocket();
   const [command, setCommand] = useState("");
-  const [isPressed, setIsPressed] = useState(false);
 
-  const handleNewCommand = (prevCommand, command, isPressed) => {
+  const handleNewCommand = (prevCommand, command) => {
     console.log({ command, prevCommand });
     if (isConnected && !error.message) {
       console.log({ isConnected });
@@ -24,17 +23,14 @@ function App() {
   };
 
   window.onkeydown = (event) => {
-    setIsPressed(true);
     const key = event.key; // "a", "1", "Shift", etc.
     console.log(key);
     switch (key) {
       case "ArrowUp":
-        console.log("blah");
         handleNewCommand(command, CONTROLS.get(key));
         setCommand(CONTROLS.get(key));
         break;
       case "ArrowDown":
-        console.log("blah");
         handleNewCommand(command, CONTROLS.get(key));
         setCommand(CONTROLS.get(key));
 
