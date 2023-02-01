@@ -184,6 +184,41 @@ const EndBlock = ({ position = [0, 0, 0] }) => {
     );
 };
 
+const HoleWall = () => {
+    return (
+        <group>
+            <mesh
+                geometry={boxGeometry}
+                material={transparentRedMaterial}
+                position={[0, 4, -3]}
+                scale={[2, 3, 2]}
+                receiveShadow
+            />
+            <mesh
+                geometry={boxGeometry}
+                material={transparentRedMaterial}
+                position={[2, 1, -3]}
+                scale={[2, 8, 2]}
+                receiveShadow
+            />
+            <mesh
+                geometry={boxGeometry}
+                material={transparentRedMaterial}
+                position={[-2, 1, -3]}
+                scale={[2, 8, 2]}
+                receiveShadow
+            />
+            <mesh
+                geometry={boxGeometry}
+                material={transparentRedMaterial}
+                position={[0, 0, -3]}
+                scale={[2, 3, 2]}
+                receiveShadow
+            />
+        </group>
+    );
+};
+
 const Bounds = ({ length = 1 }) => {
 
     const texture = useTexture(andLogo);
