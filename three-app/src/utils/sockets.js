@@ -1,17 +1,17 @@
-import { io } from 'socket.io-client';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+import { io } from "socket.io-client";
+const BACKEND_URL = "http://localhost:3000";
 
 let socket;
 
 export const onConnect = () => {
-  socket.on('connect', () => {
-    console.log('Socket Connected ...');
+  socket.on("connect", () => {
+    console.log("Socket Connected ...");
   });
 };
 
 export const onDisconnect = () => {
-  socket.on('disconnect', () => {
-    console.log('Socket Disconnected ... ...');
+  socket.on("disconnect", () => {
+    console.log("Socket Disconnected ... ...");
   });
 };
 
@@ -21,13 +21,12 @@ export const initiateSocketConnection = () => {
 };
 
 export const disconnectSocket = () => {
-  console.log('Disconnecting socket...');
+  console.log("Disconnecting socket...");
   if (socket) socket.disconnect();
 };
 
 export const onMessageHandler = (setAction) => {
-  socket.on('message', ({ name, lifecycle }) => {
-    console.log({ command: { name, lifecycle } });
+  socket.on("message", ({ name, lifecycle }) => {
     setAction({ name, lifecycle });
   });
 };

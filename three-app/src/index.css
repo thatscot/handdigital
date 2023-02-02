@@ -1,10 +1,9 @@
-* {
-  box-sizing: border-box;
-}
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
 
 html,
 body,
 #root {
+  position: fixed;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -19,11 +18,79 @@ body,
   overflow: hidden;
 }
 
-body {
+.interface {
   position: fixed;
-  overflow: hidden;
-  overscroll-behavior-y: none;
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial,
-      sans-serif;
-  color: black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-family: "Krona One", sans-serif;
+}
+
+.time {
+  position: absolute;
+  bottom: 8rem;
+  left: -1px;
+  padding: 1rem;
+  border-radius: 0 3rem 3rem 0;
+  color: white;
+  font-size: 3rem;
+  text-align: left;
+  width: 4ch;
+  background: rgba(121, 121, 121, 0.138);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.6px);
+  border: 1px solid rgba(254, 254, 254, 0.4);
+  font-family: "Krona One", sans-serif;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10%;
+  left: calc(50% - 12.5rem);
+  width: 25rem;
+  font-size: 3rem;
+  color: white;
+  padding-block: 2rem;
+  background-color: white;
+  pointer-events: auto;
+  cursor: pointer;
+  outline: 3px solid rgba(91, 108, 201, 0);
+  transition: outline 0.4s, outline-offset 0.4s;
+  /* Glassmorphism  */
+  border-radius: 3rem 20px;
+  background: rgba(121, 121, 121, 0.138);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.6px);
+  border: 1px solid rgba(254, 254, 254, 0.4);
+}
+
+.menu:hover {
+  outline: 3px solid rgba(151, 166, 255);
+  animation: 0.2s gradientGlow linear forwards;
+  background: linear-gradient(
+    45deg,
+    rgba(121, 121, 121, 0.138),
+    rgba(255, 255, 255, 0.3),
+    rgba(121, 121, 121, 0.138)
+  );
+  background-size: 200% 100%;
+  outline-offset: 0.5rem;
+}
+
+.game-stats span {
+  font-size: 2rem;
+}
+
+@keyframes gradientGlow {
+  0% {
+    background-position-x: left;
+  }
+
+  100% {
+    background-position-x: right;
+  }
 }
