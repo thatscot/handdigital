@@ -5,16 +5,26 @@ import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import fs from 'fs';
 
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { Low } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const file = join(__dirname, 'db.json');
+
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
+
+await db.read();
+db.data ||= { times: [] };
+
 dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
 const httpServer2 = createServer(app);
-const fileName = '../times.json';
-// const times = require(fileName);
-// const file = require(fileName);
-
-const file = JSON.parse(fs.readFileSync('../times.json', 'utf8'));
 
 //Three App
 const io = new Server(httpServer, {
@@ -63,16 +73,11 @@ io.on('connection', (socket) => {
     io.emit('message', { name, lifecycle });
   });
 
-  socket.on('time', (time) => {
-    const times = { times: [...file.times, time] };
-
-    fs.writeFile(fileName, JSON.stringify(times), function writeJSON(err) {
-      if (err) return console.log(err);
-      console.log(JSON.stringify(file));
-      console.log('writing to ' + fileName);
-    });
-
-    io.emit('times', times);
+  socket.on('time', async (time) => {
+    db.data.times.push(time);
+    await db.write();
+    console.log(db.data.times);
+    io.emit('times', db.data.times);
   });
 });
 

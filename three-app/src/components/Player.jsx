@@ -2,7 +2,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody } from '@react-three/rapier';
-import { disconnectSocket, initiateSocketConnection, onMessageHandler, onConnect, onDisconnect } from '../utils/sockets';
+import {
+  disconnectSocket,
+  initiateSocketConnection,
+  onMessageHandler,
+  onConnect,
+  onDisconnect,
+  emitTime,
+  onTime,
+} from '../utils/sockets';
 import { Drone } from './Drone';
 
 export const Player = () => {
@@ -17,13 +25,14 @@ export const Player = () => {
   });
 
   useEffect(() => {
-
     initiateSocketConnection();
 
     onConnect();
     onDisconnect();
 
     onMessageHandler(setAction);
+    emitTime(6);
+    onTime();
 
     return () => {
       disconnectSocket();

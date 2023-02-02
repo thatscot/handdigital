@@ -31,3 +31,13 @@ export const onMessageHandler = (setAction) => {
     setAction({ name, lifecycle });
   });
 };
+
+export const emitTime = (time) => {
+  socket.emit('time', time);
+};
+
+export const onTime = (time) => {
+  socket.on('times', (times) => {
+    console.log(times);
+  });
+};
