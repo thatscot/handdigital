@@ -7,7 +7,6 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-const httpServer2 = createServer(app);
 
 //Three App
 const io = new Server(httpServer, {
@@ -23,20 +22,18 @@ const io = new Server(httpServer, {
 });
 
 const directions = [
+  'forward',
+  'backward',
   'up',
   'down',
   'left',
-  'right',
-  'forwards',
-  'backwards',
-  'stop',
+  'right'
 ];
+
 app.get('/', (req, res) => {
-  // io.emit('message', 'sending empty direction', (response) => {
-  //   console.log(response);
-  // });
   res.send(`no direction, follow path /move/ + ${directions}`);
 });
+
 app.get('/move/:direction', (req, res) => {
   const direction = req.params.direction;
   if (direction && directions.includes(direction)) {
@@ -52,7 +49,11 @@ io.on('connection', (socket) => {
   socket.on('command', (msg) => {
     console.log('Message Received From: ', 'Hand Gesture App ', msg);
     const { name, lifecycle } = msg;
-    io.emit('message', { name, lifecycle });
+    if (name && directions.includes(name)) {
+      io.emit('message', { name, lifecycle });
+    } else {
+      console.log('invalid direction received')
+    }
   });
 });
 
