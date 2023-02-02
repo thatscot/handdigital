@@ -3,11 +3,18 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 import dotenv from 'dotenv';
+import fs from 'fs';
+
 dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
 const httpServer2 = createServer(app);
+const fileName = '../times.json';
+// const times = require(fileName);
+// const file = require(fileName);
+
+const file = JSON.parse(fs.readFileSync('../times.json', 'utf8'));
 
 //Three App
 const io = new Server(httpServer, {
@@ -17,6 +24,7 @@ const io = new Server(httpServer, {
       process.env.THREE_APP_URL,
       process.env.HANDS_APP_URL,
       'http://localhost:5000',
+      'http://localhost:5173',
     ],
     methods: ['GET', 'POST'],
   },
@@ -53,6 +61,18 @@ io.on('connection', (socket) => {
     console.log('Message Received From: ', 'Hand Gesture App ', msg);
     const { name, lifecycle } = msg;
     io.emit('message', { name, lifecycle });
+  });
+
+  socket.on('time', (time) => {
+    const times = { times: [...file.times, time] };
+
+    fs.writeFile(fileName, JSON.stringify(times), function writeJSON(err) {
+      if (err) return console.log(err);
+      console.log(JSON.stringify(file));
+      console.log('writing to ' + fileName);
+    });
+
+    io.emit('times', times);
   });
 });
 
