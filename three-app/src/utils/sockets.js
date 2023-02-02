@@ -27,7 +27,6 @@ export const disconnectSocket = () => {
 
 export const onMessageHandler = (setAction) => {
   socket.on('message', ({ name, lifecycle }) => {
-    console.log({ command: { name, lifecycle } });
     setAction({ name, lifecycle });
   });
 };
@@ -36,8 +35,8 @@ export const emitTime = (time) => {
   socket.emit('time', time);
 };
 
-export const onTime = (time) => {
-  socket.on('times', (times) => {
-    console.log(times);
+export const onTime = (setTime) => {
+  socket.on('time', (time) => {
+    setTime(time);
   });
 };

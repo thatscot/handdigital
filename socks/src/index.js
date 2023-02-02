@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
     db.data.times.push(time);
     await db.write();
     console.log(db.data.times);
-    io.emit('times', db.data.times);
+    io.emit('time', db.data.times.sort((a, b) => a - b).at(0));
   });
 });
 

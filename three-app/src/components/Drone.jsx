@@ -1,16 +1,14 @@
 import React, { useRef } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from '@react-three/fiber';
 
 export const Drone = (props) => {
     const group = useRef();
     const { nodes, materials, animations } = useGLTF("/drone.glb");
-    const { actions, names } = useAnimations(animations, group);
     const frontLeftPropeller = useRef();
     const frontRightPropeller = useRef();
     const backLeftPropeller = useRef();
     const backRightPropeller = useRef();
-    console.log(names);
 
     useFrame((state) => {
         const time = state.clock.getElapsedTime();

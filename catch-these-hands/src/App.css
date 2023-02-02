@@ -2,6 +2,8 @@
   margin: 0 auto;
   padding: 2rem 5rem;
   text-align: center;
+
+  accent-color: rgb(91, 108, 201);
 }
 
 fieldset {

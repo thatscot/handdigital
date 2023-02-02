@@ -2,9 +2,9 @@ const CONTROL_MAP = new Map([
   ['Closed_Fist', 'backward'],
   ['Open_Palm', 'forward'],
   ['Pointing_Up', 'up'],
-  ['Thumb_Down', 'down'],
+  ['Victory', 'down'],
   ['Thumb_Up', 'left'],
-  ['Victory', 'right'],
+  ['Thumb_Down', 'right'],
   ['None', 'none']
 ]);
 
