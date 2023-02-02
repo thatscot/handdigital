@@ -6,7 +6,7 @@ const useSocket = () => {
   const [error, setError] = useState({ message: undefined, error: undefined });
   let socket;
   try {
-    socket = io("http://localhost:3002");
+    socket = io("http://localhost:3000");
   } catch (e) {
     setError({ message: "Failed to find socket", error: e });
   }
