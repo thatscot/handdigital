@@ -48,10 +48,9 @@ export const Player = () => {
     const velocity = 5 * delta;
     const playerPosition = playerRef.current.translation();
 
-
     if (gameState === GAME_STATE.LOADED) {
       playerRef.current.setTranslation({ x: 0, y: 1, z: 0 });
-    };
+    }
 
     if (gameState === GAME_STATE.GAME_OVER) {
       playerRef.current.setTranslation({ x: 0, y: 1, z: 0 });
@@ -62,7 +61,6 @@ export const Player = () => {
     if (playerPosition.z < -18 && gameState !== GAME_STATE.LOADED) {
       completeGame();
     }
-
 
     if (gameState === GAME_STATE.STARTED) {
       if (lifecycle === "end") {
@@ -123,7 +121,7 @@ export const Player = () => {
           }
         }
       }
-    };
+    }
 
     // Camera
     const cameraPosition = new THREE.Vector3();

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+
 html,
 body,
 #root {
@@ -23,23 +25,24 @@ body,
   width: 100%;
   height: 100%;
   pointer-events: none;
-
-  font-family: 'Bebas Neue', cursive;
+  font-family: "Krona One", sans-serif;
 }
 
 .time {
-  display: grid;
-  place-items: center;
   position: absolute;
-  bottom: 5rem;
-  left: 0;
-  width: 10rem;
+  bottom: 8rem;
+  left: -1px;
+  padding: 1rem;
+  border-radius: 0 3rem 3rem 0;
   color: white;
-  background-color: black;
-  opacity: 0.5;
-  font-size: 6vh;
-  padding: 8px;
+  font-size: 3rem;
   text-align: left;
+  width: 4ch;
+  background: rgba(121, 121, 121, 0.138);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.6px);
+  border: 1px solid rgba(254, 254, 254, 0.4);
+  font-family: "Krona One", sans-serif;
 }
 
 .menu {
@@ -47,29 +50,47 @@ body,
   justify-content: center;
   position: absolute;
   bottom: 10%;
-  left: 36%;
-  width: 25%;
+  left: calc(50% - 12.5rem);
+  width: 25rem;
+  font-size: 3rem;
   color: white;
-  font-size: 8vh;
-  white-space: pre-line;
-  background-color: black;
-  opacity: 0.5;
-  padding: 8px;
+  padding-block: 2rem;
+  background-color: white;
   pointer-events: auto;
   cursor: pointer;
+  outline: 3px solid rgba(91, 108, 201, 0);
+  transition: outline 0.4s, outline-offset 0.4s;
+  /* Glassmorphism  */
+  border-radius: 3rem 20px;
+  background: rgba(121, 121, 121, 0.138);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10.6px);
+  border: 1px solid rgba(254, 254, 254, 0.4);
 }
 
-.game-stats {
-  position: absolute;
-  bottom: 0;
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: repeat(3, 2rem);
-  gap: 1rem;
-
-  font-family: 'Bebas Neue', cursive;
+.menu:hover {
+  outline: 3px solid rgba(151, 166, 255);
+  animation: 0.2s gradientGlow linear forwards;
+  background: linear-gradient(
+    45deg,
+    rgba(121, 121, 121, 0.138),
+    rgba(255, 255, 255, 0.3),
+    rgba(121, 121, 121, 0.138)
+  );
+  background-size: 200% 100%;
+  outline-offset: 0.5rem;
 }
 
 .game-stats span {
   font-size: 2rem;
+}
+
+@keyframes gradientGlow {
+  0% {
+    background-position-x: left;
+  }
+
+  100% {
+    background-position-x: right;
+  }
 }
