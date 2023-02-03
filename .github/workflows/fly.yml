@@ -4,13 +4,13 @@ on:
     paths:
       - 'socks/**'
     branches:
-      - highscore
+      - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
     paths:
       - 'socks/**'
     branches:
-      - highscore
+      - main
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 jobs:
