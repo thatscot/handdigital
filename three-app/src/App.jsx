@@ -18,7 +18,6 @@ export default function App() {
             <Lights />
             <Level />
             <Player />
-            <Debug />
           </Physics>
         </XR>
       </Canvas>
