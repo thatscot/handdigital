@@ -67,6 +67,7 @@ app.get('/move/:direction', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+  io.emit('time', getBestTime());
   socket.on('command', (msg) => {
     console.log('Message Received From: ', 'Hand Gesture App ', msg);
     const { name, lifecycle } = msg;
@@ -77,9 +78,13 @@ io.on('connection', (socket) => {
     db.data.times.push(time);
     await db.write();
     console.log(db.data.times);
-    io.emit('time', db.data.times.sort((a, b) => a - b).at(0));
+    io.emit('time', getBestTime());
   });
 });
+
+const getBestTime = () => {
+  return db.data.times.sort((a, b) => a - b).at(0);
+};
 
 httpServer.listen(process.env.PORT || '3000', () => {
   console.log('listening on *:3000');
