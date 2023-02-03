@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 
 import dotenv from 'dotenv';
 dotenv.config();
-
+let thing = '';
 const app = express();
 const httpServer = createServer(app);
 const httpServer2 = createServer(app);
