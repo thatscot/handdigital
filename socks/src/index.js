@@ -75,10 +75,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('time', async (time) => {
-    db.data.times.push(time);
-    await db.write();
-    console.log(db.data.times);
-    io.emit('time', getBestTime());
+    if (time > 0) {
+      db.data.times.push(time);
+      await db.write();
+      console.log(db.data.times);
+      io.emit('time', getBestTime());
+    }
   });
 });
 
