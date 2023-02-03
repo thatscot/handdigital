@@ -27,13 +27,11 @@ export const Interface = () => {
     }
   }
 
-  useEffect(() => {
-    window.onkeydown = (e) => {
-      if (!e.repeat && e.code === "Space") {
-        action();
-      }
-    };
-  });
+  window.onkeydown = (e) => {
+    if (!e.repeat && e.code === "Space") {
+      action();
+    }
+  };
 
   return (
     <div className="interface">
