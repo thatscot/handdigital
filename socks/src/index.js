@@ -17,6 +17,8 @@ const io = new Server(httpServer, {
       process.env.THREE_APP_URL,
       process.env.HANDS_APP_URL,
       'http://localhost:5000',
+      'http://localhost:5173',
+      'http://localhost:3005',
     ],
     methods: ['GET', 'POST'],
   },
