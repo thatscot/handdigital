@@ -9,6 +9,7 @@ import { Interface } from './components/Interface';
 import { XR, VRButton } from '@react-three/xr';
 import { GameProvider } from './hooks';
 export default function App() {
+  let test = '';
   return (
     <GameProvider>
       <VRButton />

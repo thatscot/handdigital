@@ -21,7 +21,7 @@ await db.read();
 db.data ||= { times: [] };
 
 dotenv.config();
-
+let test = '';
 const app = express();
 const httpServer = createServer(app);
 const httpServer2 = createServer(app);
