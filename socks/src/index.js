@@ -20,7 +20,7 @@ await db.read();
 db.data ||= { times: [] };
 
 dotenv.config();
-
+let thing = '';
 const app = express();
 const httpServer = createServer(app);
 
