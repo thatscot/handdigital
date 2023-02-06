@@ -1,5 +1,5 @@
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 const useElapsedTime = () => {
   const [time, setTime] = useState(0);
@@ -34,7 +34,7 @@ const useElapsedTime = () => {
   }, [isRunning]);
 
   // Might wanna return unformatted time here and format in components 🤷‍♀️
-  return { elapsedTime: format(time, "s.S"), start, stop, reset };
+  return { elapsedTime: format(time, 's.S'), start, stop, reset };
 };
 
 export { useElapsedTime };
