@@ -68,11 +68,22 @@ app.get('/move/:direction', (req, res) => {
 
 io.on('connection', (socket) => {
   io.emit('time', getBestTime());
+
   socket.on('command', (msg) => {
-    console.log('Message Received From: ', 'Hand Gesture App ', msg);
-    const { name, lifecycle } = msg;
-    io.emit('message', { name, lifecycle });
+    if (msg.password) {
+      console.log('emitting pass', msg.password);
+      console.log('msg ', msg.msg);
+      io.emit(`message:${msg.password}`, msg.msg);
+      return;
+    } else {
+      console.log('Message Received From: ', 'Hand Gesture App ', msg);
+      const { name, lifecycle } = msg;
+
+      io.emit('message', { name, lifecycle });
+    }
   });
+
+  socket.on(`command`, ({ password, msg }) => {});
 
   socket.on('time', async (time) => {
     if (time > 0) {

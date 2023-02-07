@@ -9,6 +9,8 @@ import {
   onConnect,
   onDisconnect,
   onTime,
+  emitPosition,
+  onPrivateMessage,
 } from '../utils/sockets';
 import { Drone } from './Drone';
 import { useGameContext } from '../hooks';
@@ -24,8 +26,10 @@ export const Player = () => {
     name: undefined,
     lifecycle: undefined,
   });
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
+    setPassword(window.localStorage.getItem('password') || '');
     initiateSocketConnection();
 
     onConnect();
@@ -38,6 +42,10 @@ export const Player = () => {
       disconnectSocket();
     };
   }, []);
+
+  useEffect(() => {
+    onPrivateMessage(password, setAction);
+  }, [password]);
 
   useFrame((state, delta) => {
     if (!playerRef.current) {

@@ -40,3 +40,16 @@ export const onTime = (setTime) => {
     setTime(time);
   });
 };
+
+export const emitPosition = (position) => {
+  console.log('emit');
+  socket.on('position', position);
+};
+
+export const onPrivateMessage = (password, setAction) => {
+  console.log('listening for ', `message:${password}`);
+  socket.on(`message:${password}`, ({ name, lifecycle }) => {
+    console.log('p message ', name, lifecycle);
+    setAction({ name, lifecycle });
+  });
+};
