@@ -5,13 +5,13 @@ on:
     paths:
       - 'catch-these-hands/**'
     branches:
-      - highscore
+      - main
   pull_request:
     paths:
       - 'catch-these-hands/**'
     types: [opened, synchronize, reopened, closed]
     branches:
-      - highscore
+      - main
 
 jobs:
   build_and_deploy_job:
