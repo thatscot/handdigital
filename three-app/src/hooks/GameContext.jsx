@@ -1,14 +1,26 @@
-import { createContext, useContext, useState } from "react";
-import { GAME_STATE } from "../utils/constants";
-import { useElapsedTime } from "./useElapsedTime";
-import { emitTime } from "../utils/sockets";
+import { createContext, useContext, useState } from 'react';
+import { GAME_STATE } from '../utils/constants';
+import { useElapsedTime } from './useElapsedTime';
+import { emitTime } from '../utils/sockets';
+import { useEffect } from 'react';
+import { generateOTP } from '../utils/utils';
 const GameContext = createContext({});
 
 const GameProvider = ({ children }) => {
   const [gameState, setIsGameState] = useState(GAME_STATE.LOADED);
   const [bestTime, setBestTime] = useState();
+  const [otpCode, setOtpCode] = useState(sessionStorage.getItem('game-code'));
 
   const { elapsedTime, reset, start, stop } = useElapsedTime();
+
+  useEffect(() => {
+    const gameCode = sessionStorage.getItem('game-code');
+    if (!gameCode) {
+      const newCode = generateOTP();
+      setOtpCode(newCode);
+      sessionStorage.setItem('game-code', newCode);
+    }
+  }, []);
 
   function startGame() {
     start();
@@ -38,8 +50,8 @@ const GameProvider = ({ children }) => {
         elapsedTime,
         setBestTime,
         bestTime,
-      }}
-    >
+        otpCode
+      }}>
       {children}
     </GameContext.Provider>
   );

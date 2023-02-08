@@ -35,13 +35,13 @@ const BUTTON_STATES = {
   [AUTHENTICATION_STATES.SUCCESS]: 'Linked ✌️'
 };
 
-const Authenticator = () => {
+const Authenticator = ({ setIsAuthenticated }) => {
   const initArray = Array.from({ length: 4 });
   const [authCode, setAuthCode] = useState(initArray);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [authState, setAuthState] = useState(AUTHENTICATION_STATES.DEFAULT);
   const [error, setError] = useState('');
-  const { getCode, setCode, verifyCode } = useAuthenticationCode();
+  const { setCode } = useAuthenticationCode();
 
   const inputRef = useRef();
 
@@ -70,6 +70,7 @@ const Authenticator = () => {
         if (authCodeString === '1234') {
           setAuthState(AUTHENTICATION_STATES.SUCCESS);
           setCode(authCodeString);
+          setIsAuthenticated(true);
           // On success
           //    Save code in localstorage/session storage
           //    Close modal

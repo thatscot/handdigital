@@ -8,7 +8,7 @@ const useAuthenticationCode = () => {
   function getCode() {
     return sessionStorage.getItem('game-code');
   }
-  return { setCode, code: getCode(), verifyCode };
+  return { setCode, getCode, verifyCode };
 };
 
 export { useAuthenticationCode };

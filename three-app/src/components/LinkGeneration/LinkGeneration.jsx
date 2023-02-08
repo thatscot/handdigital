@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react";
-import styles from "./LinkGeneration.module.css";
+import { useEffect, useState } from 'react';
+import styles from './LinkGeneration.module.css';
+import { useGameContext } from '../../hooks';
 
 const CODE_STATES = {
-  DEFAULT: "default",
-  COPIED: "copied",
+  DEFAULT: 'default',
+  COPIED: 'copied'
 };
 
 const BUTTON_STATES = {
-  [CODE_STATES.DEFAULT]: "Copy",
-  [CODE_STATES.COPIED]: "Copied! ✌️",
+  [CODE_STATES.DEFAULT]: 'Copy',
+  [CODE_STATES.COPIED]: 'Copied! ✌️'
 };
 
 const LinkGeneration = () => {
   const [displayModal, setDisplayModel] = useState(false);
   const [codeState, setCodeState] = useState(CODE_STATES.DEFAULT);
-  const code = "1234";
+  const { otpCode } = useGameContext();
 
   function toggleModal() {
     setDisplayModel((prevDisplayModel) => !prevDisplayModel);
@@ -23,7 +24,7 @@ const LinkGeneration = () => {
   useEffect(() => {}, [displayModal]);
 
   function copyCode() {
-    navigator.clipboard.writeText(code).then(
+    navigator.clipboard.writeText(otpCode).then(
       () => {
         setCodeState(CODE_STATES.COPIED);
         setTimeout(() => {
@@ -47,7 +48,7 @@ const LinkGeneration = () => {
               <p>Use to link your controller</p>
             </div>
             <div className={styles.gameCode}>
-              {code.split("").map((char) => (
+              {otpCode.split('').map((char) => (
                 <div className={styles.charDisplay}>{char}</div>
               ))}
             </div>
