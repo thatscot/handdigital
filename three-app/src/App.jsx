@@ -1,6 +1,6 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Physics, Debug } from '@react-three/rapier';
+import { Physics } from '@react-three/rapier';
 import { Lights } from './components/Lights';
 import { Level } from './components/Level';
 import { Player } from './components/Player';
@@ -9,7 +9,6 @@ import { Interface } from './components/Interface';
 import { XR, VRButton } from '@react-three/xr';
 import { GameProvider } from './hooks';
 export default function App() {
-  let test = '';
   return (
     <GameProvider>
       <VRButton />
