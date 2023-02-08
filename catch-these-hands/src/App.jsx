@@ -3,10 +3,9 @@ import { useGetUserMedia } from './hooks';
 import { formatLabel } from './utils';
 import { CONTROL_MAP, EMOJI_MAP, VID_DIMENSIONS } from './constants';
 import './App.css';
-import { GestureCamera } from './components/GestureCamera';
+import { GestureCamera, Authenticator } from './components';
 
 function App() {
-  let thing = '';
   const [activeGesture, setActiveGesture] = useState('None');
 
   const {
@@ -51,6 +50,7 @@ function App() {
           </fieldset>
         </div>
       </div>
+      <Authenticator />
     </div>
   );
 }
