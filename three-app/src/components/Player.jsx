@@ -1,24 +1,25 @@
-import React, { useRef, useState, useEffect } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import { RigidBody } from "@react-three/rapier";
+import React, { useRef, useState, useEffect } from 'react';
+import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { RigidBody } from '@react-three/rapier';
 import {
   disconnectSocket,
   initiateSocketConnection,
   onMessageHandler,
   onConnect,
   onDisconnect,
-} from "../utils/sockets";
-import { Drone } from "./Drone";
-import { useGameContext } from "../hooks";
-import { GAME_STATE } from "../utils/constants";
+  onTime,
+} from '../utils/sockets';
+import { Drone } from './Drone';
+import { useGameContext } from '../hooks';
+import { GAME_STATE } from '../utils/constants';
 
 export const Player = () => {
   const playerRef = useRef(null);
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
-  const { gameState, resetGame, completeGame } = useGameContext();
+  const { gameState, resetGame, completeGame, setBestTime } = useGameContext();
   const [action, setAction] = useState({
     name: undefined,
     lifecycle: undefined,
@@ -31,6 +32,7 @@ export const Player = () => {
     onDisconnect();
 
     onMessageHandler(setAction);
+    onTime(setBestTime);
 
     return () => {
       disconnectSocket();
@@ -63,15 +65,15 @@ export const Player = () => {
     }
 
     if (gameState === GAME_STATE.STARTED) {
-      if (lifecycle === "end") {
+      if (lifecycle === 'end') {
         playerRef.current.setTranslation({
           x: playerPosition.x,
           y: playerPosition.y,
           z: playerPosition.z,
         });
-      } else if (lifecycle === "start") {
+      } else if (lifecycle === 'start') {
         switch (name) {
-          case "forward": {
+          case 'forward': {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y,
@@ -79,7 +81,7 @@ export const Player = () => {
             });
             break;
           }
-          case "backward": {
+          case 'backward': {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y,
@@ -87,7 +89,7 @@ export const Player = () => {
             });
             break;
           }
-          case "up": {
+          case 'up': {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y + velocity,
@@ -95,7 +97,7 @@ export const Player = () => {
             });
             break;
           }
-          case "down": {
+          case 'down': {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y - velocity,
@@ -103,7 +105,7 @@ export const Player = () => {
             });
             break;
           }
-          case "left": {
+          case 'left': {
             playerRef.current.setTranslation({
               x: playerPosition.x - velocity,
               y: playerPosition.y,
@@ -111,7 +113,7 @@ export const Player = () => {
             });
             break;
           }
-          case "right": {
+          case 'right': {
             playerRef.current.setTranslation({
               x: playerPosition.x + velocity,
               y: playerPosition.y,
@@ -143,7 +145,7 @@ export const Player = () => {
   return (
     <RigidBody
       ref={playerRef}
-      colliders={"hull"}
+      colliders={'hull'}
       lockRotations
       linearDamping={1}
       position={[0, 1, 0]}

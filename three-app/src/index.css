@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
 
 html,
 body,
@@ -25,12 +25,11 @@ body,
   width: 100%;
   height: 100%;
   pointer-events: none;
-  font-family: "Krona One", sans-serif;
+  font-family: 'Krona One', sans-serif;
 }
 
 .time {
   position: absolute;
-  bottom: 8rem;
   left: -1px;
   padding: 1rem;
   border-radius: 0 3rem 3rem 0;
@@ -42,7 +41,16 @@ body,
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10.6px);
   border: 1px solid rgba(254, 254, 254, 0.4);
-  font-family: "Krona One", sans-serif;
+  font-family: 'Krona One', sans-serif;
+}
+
+.bestTime {
+  white-space: nowrap;
+  bottom: 14.5rem;
+}
+
+.elapsedTime {
+  bottom: 8rem;
 }
 
 .menu {

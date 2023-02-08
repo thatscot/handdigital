@@ -1,8 +1,24 @@
-import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
+import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const file = join(__dirname, "db.json");
+
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
+
+await db.read();
+db.data ||= { times: [] };
+
 dotenv.config();
 
 const app = express();
@@ -22,26 +38,40 @@ const io = new Server(httpServer, {
 });
 
 const directions = [
-  'up',
-  'down',
-  'left',
-  'right',
-  'forwards',
-  'backwards',
-  'stop',
+  "up",
+  "down",
+  "left",
+  "right",
+  "forwards",
+  "backwards",
+  "stop",
 ];
-app.get('/', (req, res) => {
+
+app.get("/", (req, res) => {
   res.send(`no direction, follow path /move/ + ${directions}`);
 });
 
-io.on('connection', (socket) => {
-  socket.on('command', (msg) => {
-    console.log('Message Received From: ', 'Hand Gesture App ', msg);
+io.on("connection", (socket) => {
+  io.emit("time", getBestTime());
+  socket.on("command", (msg) => {
+    console.log("Message Received From: ", "Hand Gesture App ", msg);
     const { name, lifecycle } = msg;
-    io.emit('message', { name, lifecycle });
+    io.emit("message", { name, lifecycle });
+  });
+
+  socket.on("time", async (time) => {
+    if (time > 0) {
+      db.data.times.push(time);
+      await db.write();
+      io.emit("time", getBestTime());
+    }
   });
 });
 
-httpServer.listen(process.env.PORT || '3000', () => {
-  console.log('listening on *:3000');
+const getBestTime = () => {
+  return db.data.times.sort((a, b) => a - b)[0];
+};
+
+httpServer.listen(process.env.PORT || "3000", () => {
+  console.log("listening on *:3000");
 });
