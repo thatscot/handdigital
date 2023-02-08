@@ -20,13 +20,20 @@ await db.read();
 db.data ||= { times: [] };
 
 dotenv.config();
+
 const app = express();
 const httpServer = createServer(app);
 
+
 const io = new Server(httpServer, {
   cors: {
-    origin: [process.env.THREE_APP_URL, process.env.HANDS_APP_URL],
-    methods: ["GET", "POST"],
+    origin: [
+      process.env.THREE_APP_URL,
+      process.env.HANDS_APP_URL,
+      'http://localhost:5000',
+      'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST'],
   },
 });
 
@@ -39,6 +46,7 @@ const directions = [
   "backwards",
   "stop",
 ];
+
 app.get("/", (req, res) => {
   res.send(`no direction, follow path /move/ + ${directions}`);
 });
