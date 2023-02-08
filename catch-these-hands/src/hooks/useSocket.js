@@ -30,7 +30,7 @@ const useSocket = () => {
 
   const sendCommand = ({ name, lifecycle }) => {
     console.log({ command: { name, lifecycle } });
-    socket.emit('command', { name, lifecycle });
+    socket.emit('command', { command: { name, lifecycle }, uuid: '62e5ee53-ae62-48fe-a371-41d7be0f2b69' });
   };
 
   return { sendCommand, isConnected, error };

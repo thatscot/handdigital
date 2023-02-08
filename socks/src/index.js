@@ -20,43 +20,42 @@ await db.read();
 db.data ||= { times: [] };
 
 dotenv.config();
+
 const app = express();
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
+const options = {
   cors: {
-    origin: [process.env.THREE_APP_URL, process.env.HANDS_APP_URL],
+    origin: [
+      process.env.THREE_APP_URL,
+      process.env.HANDS_APP_URL,
+      "http://localhost:5000",
+      "http://localhost:5173",
+    ],
     methods: ["GET", "POST"],
   },
-});
+};
 
-const directions = [
-  "up",
-  "down",
-  "left",
-  "right",
-  "forwards",
-  "backwards",
-  "stop",
-];
-app.get("/", (req, res) => {
-  res.send(`no direction, follow path /move/ + ${directions}`);
-});
+const io = new Server(httpServer, options);
+
+const sessions = {};
 
 io.on("connection", (socket) => {
-  io.emit("time", getBestTime());
-  socket.on("command", (msg) => {
-    console.log("Message Received From: ", "Hand Gesture App ", msg);
-    const { name, lifecycle } = msg;
-    io.emit("message", { name, lifecycle });
-  });
+  const uuid = socket.handshake.auth.uuid;
 
-  socket.on("time", async (time) => {
-    if (time > 0) {
-      db.data.times.push(time);
-      await db.write();
-      io.emit("time", getBestTime());
-    }
+  if (uuid) sessions[uuid] = { sessionId: socket.id };
+
+  socket.on("command", ({ command, uuid }) => {
+    console.log(command, uuid);
+
+    const { name, lifecycle } = command;
+
+    const sessionId = sessions[uuid]?.sessionId;
+
+    if (!sessionId)
+      console.log(`No Session found using sessionId: ${sessionId}`);
+
+    if (sessionId) io.to(sessionId).emit("message", { name, lifecycle });
   });
 });
 

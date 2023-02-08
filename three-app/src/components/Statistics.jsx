@@ -1,4 +1,4 @@
-import { useGameContext } from "../hooks";
+import { useGameContext } from '../hooks';
 
 const Statistics = () => {
   const { elapsedTime, bestTime } = useGameContext();
