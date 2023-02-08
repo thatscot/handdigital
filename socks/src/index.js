@@ -4,55 +4,43 @@ import { Server } from 'socket.io';
 
 import dotenv from 'dotenv';
 dotenv.config();
-let thing = '';
+
 const app = express();
 const httpServer = createServer(app);
-const httpServer2 = createServer(app);
 
-//Three App
-const io = new Server(httpServer, {
+const options = {
   cors: {
-    // origin: ['http://localhost:5000', 'http://localhost:5173'],
     origin: [
       process.env.THREE_APP_URL,
       process.env.HANDS_APP_URL,
       'http://localhost:5000',
+      'http://localhost:5173'
     ],
     methods: ['GET', 'POST'],
   },
-});
+};
 
-const directions = [
-  'up',
-  'down',
-  'left',
-  'right',
-  'forwards',
-  'backwards',
-  'stop',
-];
-app.get('/', (req, res) => {
-  // io.emit('message', 'sending empty direction', (response) => {
-  //   console.log(response);
-  // });
-  res.send(`no direction, follow path /move/ + ${directions}`);
-});
-app.get('/move/:direction', (req, res) => {
-  const direction = req.params.direction;
-  if (direction && directions.includes(direction)) {
-    io.emit('message', direction, (response) => {
-      console.log(response);
-    });
-  } else {
-    res.send('no valid direction added');
-  }
-});
+const io = new Server(httpServer, options);
+
+const sessions = {};
 
 io.on('connection', (socket) => {
-  socket.on('command', (msg) => {
-    console.log('Message Received From: ', 'Hand Gesture App ', msg);
-    const { name, lifecycle } = msg;
-    io.emit('message', { name, lifecycle });
+
+  const uuid = socket.handshake.auth.uuid;
+
+  if (uuid) sessions[uuid] = { sessionId: socket.id };
+
+  socket.on('command', ({ command, uuid }) => {
+
+    console.log(command, uuid);
+
+    const { name, lifecycle } = command;
+
+    const sessionId = sessions[uuid]?.sessionId;
+
+    if (!sessionId) console.log(`No Session found using sessionId: ${sessionId}`);
+
+    if (sessionId) io.to(sessionId).emit('message', { name, lifecycle });
   });
 });
 

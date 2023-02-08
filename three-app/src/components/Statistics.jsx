@@ -11,7 +11,6 @@ const Statistics = () => {
   });
 
   useEffect(() => {
-    console.log({ reset });
     initialiseTimer(reset);
   }, [reset]);
 
