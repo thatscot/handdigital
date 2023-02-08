@@ -20,7 +20,6 @@ await db.read();
 db.data ||= { times: [] };
 
 dotenv.config();
-let thing = '';
 const app = express();
 const httpServer = createServer(app);
 
@@ -56,7 +55,6 @@ io.on("connection", (socket) => {
     if (time > 0) {
       db.data.times.push(time);
       await db.write();
-      console.log(db.data.times);
       io.emit("time", getBestTime());
     }
   });
