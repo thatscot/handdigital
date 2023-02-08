@@ -11,6 +11,7 @@ import {
 } from "./components";
 import { XR, VRButton } from "@react-three/xr";
 import { GameProvider } from "./hooks";
+
 export default function App() {
   return (
     <GameProvider>
