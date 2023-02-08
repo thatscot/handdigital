@@ -6,7 +6,6 @@ import './App.css';
 import { GestureCamera } from './components/GestureCamera';
 
 function App() {
-  let test = ''
   const [activeGesture, setActiveGesture] = useState('None');
 
   const {
