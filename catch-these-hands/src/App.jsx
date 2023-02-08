@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useGetUserMedia } from './hooks';
+import { useEffect, useState } from 'react';
+import { useAuthenticationCode, useGetUserMedia } from './hooks';
 import { formatLabel } from './utils';
 import { CONTROL_MAP, EMOJI_MAP, VID_DIMENSIONS } from './constants';
 import './App.css';
@@ -7,6 +7,9 @@ import { GestureCamera, Authenticator } from './components';
 
 function App() {
   const [activeGesture, setActiveGesture] = useState('None');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const { code } = useAuthenticationCode();
 
   const {
     stream,
@@ -19,6 +22,10 @@ function App() {
   });
 
   const displayUserMedia = stream && !isUserMediaLoading && !isError;
+
+  useEffect(() => {
+    setIsAuthenticated(!!code);
+  }, [code]);
 
   return (
     <div className="App">
@@ -50,7 +57,7 @@ function App() {
           </fieldset>
         </div>
       </div>
-      <Authenticator />
+      {!isAuthenticated && <Authenticator />}
     </div>
   );
 }

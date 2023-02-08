@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './Authenticator.module.css';
+import { useAuthenticationCode } from '../../hooks';
 
 const AUTHENTICATION_STATES = {
   LOADING: 'loading',
@@ -40,6 +41,7 @@ const Authenticator = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [authState, setAuthState] = useState(AUTHENTICATION_STATES.DEFAULT);
   const [error, setError] = useState('');
+  const { getCode, setCode, verifyCode } = useAuthenticationCode();
 
   const inputRef = useRef();
 
@@ -55,7 +57,7 @@ const Authenticator = () => {
     }
   }
 
-  function verifyCode() {
+  function handleSubmit() {
     const authCodeString = authCode.join('');
     if (authCodeString.length < 4) {
       setAuthState(AUTHENTICATION_STATES.ERROR);
@@ -67,6 +69,7 @@ const Authenticator = () => {
       setTimeout(() => {
         if (authCodeString === '1234') {
           setAuthState(AUTHENTICATION_STATES.SUCCESS);
+          setCode(authCodeString);
           // On success
           //    Save code in localstorage/session storage
           //    Close modal
@@ -123,7 +126,7 @@ const Authenticator = () => {
         </div>
         <button
           data-state={authState}
-          onClick={verifyCode}
+          onClick={handleSubmit}
           disabled={authState === AUTHENTICATION_STATES.LOADING}>
           <span>{BUTTON_STATES[authState]}</span>
         </button>
