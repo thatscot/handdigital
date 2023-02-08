@@ -1,26 +1,22 @@
-import { createContext, useContext, useState } from 'react';
-import { GAME_STATE } from '../utils/constants';
-import { useElapsedTime } from 'use-elapsed-time';
-import { emitTime } from '../utils/sockets';
+import { createContext, useContext, useState } from "react";
+import { GAME_STATE } from "../utils/constants";
+import { useElapsedTime } from "./useElapsedTime";
+import { emitTime } from "../utils/sockets";
 const GameContext = createContext({});
 
 const GameProvider = ({ children }) => {
   const [gameState, setIsGameState] = useState(GAME_STATE.LOADED);
   const [bestTime, setBestTime] = useState();
 
-  const { elapsedTime, reset } = useElapsedTime({
-    isPlaying: gameState === GAME_STATE.STARTED,
-  });
+  const { elapsedTime, reset, start, stop } = useElapsedTime();
 
   function startGame() {
+    start();
     setIsGameState(GAME_STATE.STARTED);
   }
 
-  function endGame() {
-    setIsGameState(GAME_STATE.GAME_OVER);
-  }
-
   function completeGame() {
+    stop();
     setIsGameState(GAME_STATE.COMPLETED);
   }
 
@@ -28,7 +24,7 @@ const GameProvider = ({ children }) => {
     if (gameState === GAME_STATE.COMPLETED) {
       emitTime(elapsedTime);
     }
-    reset(0);
+    reset();
     setIsGameState(GAME_STATE.LOADED);
   }
 
@@ -37,7 +33,6 @@ const GameProvider = ({ children }) => {
       value={{
         gameState,
         startGame,
-        endGame,
         completeGame,
         resetGame,
         elapsedTime,
