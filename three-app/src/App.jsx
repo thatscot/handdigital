@@ -1,16 +1,9 @@
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { Physics } from "@react-three/rapier";
-import {
-  Interface,
-  Statistics,
-  Player,
-  Level,
-  Lights,
-  LinkGeneration,
-} from "./components";
-import { XR, VRButton } from "@react-three/xr";
-import { GameProvider } from "./hooks";
+import React from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Physics } from '@react-three/rapier';
+import { Interface, Statistics, Player, Level, Lights, LinkGeneration } from './components';
+import { XR, VRButton } from '@react-three/xr';
+import { GameProvider } from './hooks';
 
 export default function App() {
   return (

@@ -11,6 +11,7 @@ const GestureCamera = memo(({ stream, setActiveCommand }) => {
   const canvasCtx = canvasElement.current?.getContext('2d');
   const { sendCommand, isConnected, error } = useSocket();
   const { gestureRecogniser, isLoading } = useGestureRecogniser();
+  const authCode = sessionStorage.getItem('game-code');
 
   const handleNewCommand = (prevCommand, command) => {
     if (isConnected && !error.message) {
@@ -18,10 +19,11 @@ const GestureCamera = memo(({ stream, setActiveCommand }) => {
         if (prevCommand) {
           sendCommand({
             name: CONTROL_MAP.get(prevCommand),
-            lifecycle: 'end'
+            lifecycle: 'end',
+            uuid: authCode
           });
         }
-        sendCommand({ name: CONTROL_MAP.get(command), lifecycle: 'start' });
+        sendCommand({ name: CONTROL_MAP.get(command), lifecycle: 'start', uuid: authCode });
         setActiveCommand(command);
       }
     } else {

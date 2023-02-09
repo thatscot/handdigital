@@ -41,7 +41,7 @@ const Authenticator = ({ setIsAuthenticated }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [authState, setAuthState] = useState(AUTHENTICATION_STATES.DEFAULT);
   const [error, setError] = useState('');
-  const { setCode } = useAuthenticationCode();
+  const { setCode, verifyCode } = useAuthenticationCode();
 
   const inputRef = useRef();
 
@@ -65,20 +65,16 @@ const Authenticator = ({ setIsAuthenticated }) => {
       return;
     } else {
       setAuthState(AUTHENTICATION_STATES.LOADING);
-      // Verify code with Server
-      setTimeout(() => {
-        if (authCodeString === '1234') {
+      verifyCode(authCodeString).then(({ authenticated, error }) => {
+        if (authenticated) {
           setAuthState(AUTHENTICATION_STATES.SUCCESS);
           setCode(authCodeString);
           setIsAuthenticated(true);
-          // On success
-          //    Save code in localstorage/session storage
-          //    Close modal
         } else {
           setAuthState(AUTHENTICATION_STATES.ERROR);
-          setError('Invalid code, please try again.');
+          setError(error);
         }
-      }, 3000);
+      });
     }
   }
 
