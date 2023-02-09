@@ -2,7 +2,7 @@ import { FilesetResolver, GestureRecognizer } from '@mediapipe/tasks-vision';
 import { useState, useEffect } from 'react';
 
 const MODEL_PATH = new URL('../assets/gesture_recognizer.task', import.meta.url);
-1;
+
 const useGestureRecogniser = ({ numHands = 1, runningMode = 'video' } = {}) => {
   const [gestureRecogniser, setGestureRecogniser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
