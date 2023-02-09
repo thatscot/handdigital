@@ -28,7 +28,7 @@ const app = express();
 app.use(cors({ origin: ["http://localhost:5000", process.env.THREE_APP_URL] }));
 const httpServer = createServer(app);
 
-const options = {
+const io = new Server(httpServer, {
   cors: {
     origin: [
       process.env.THREE_APP_URL,
@@ -38,9 +38,7 @@ const options = {
     ],
     methods: ["GET", "POST"],
   },
-};
-
-const io = new Server(httpServer, options);
+});
 
 const sessions = {};
 

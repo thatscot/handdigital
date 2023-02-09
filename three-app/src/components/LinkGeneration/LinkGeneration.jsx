@@ -49,7 +49,9 @@ const LinkGeneration = () => {
             </div>
             <div className={styles.gameCode}>
               {otpCode.split('').map((char) => (
-                <div className={styles.charDisplay}>{char}</div>
+                <div key={`game-code-${char}`} className={styles.charDisplay}>
+                  {char}
+                </div>
               ))}
             </div>
             <button onClick={copyCode} data-state={codeState}>

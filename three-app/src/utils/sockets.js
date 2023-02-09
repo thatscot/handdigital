@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+const BACKEND_URL = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_BACKEND_URL
+  : import.meta.env.VITE_LOCAL_BACKEND_URL;
 
 let socket;
 
