@@ -1,5 +1,7 @@
-import { io } from "socket.io-client";
-const BACKEND_URL = import.meta.env.PROD ? import.meta.env.VITE_PROD_BACKEND_URL : import.meta.env.VITE_LOCAL_BACKEND_URL ;
+import { io } from 'socket.io-client';
+const BACKEND_URL = import.meta.env.PROD
+  ? import.meta.env.VITE_PROD_BACKEND_URL
+  : import.meta.env.VITE_LOCAL_BACKEND_URL;
 
 let socket;
 
@@ -15,9 +17,13 @@ export const onDisconnect = () => {
   });
 };
 
-export const initiateSocketConnection = () => {
+export const initiateSocketConnection = ({ uuid }) => {
   console.log(`Connecting socket...`);
+
+  console.log(uuid, 'uuid');
+
   socket = io(BACKEND_URL);
+  socket.auth = { uuid };
 };
 
 export const disconnectSocket = () => {

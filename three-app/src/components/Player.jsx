@@ -8,7 +8,7 @@ import {
   onMessageHandler,
   onConnect,
   onDisconnect,
-  onTime,
+  onTime
 } from '../utils/sockets';
 import { Drone } from './Drone';
 import { useGameContext } from '../hooks';
@@ -19,14 +19,14 @@ export const Player = () => {
 
   const [smoothCameraPosition] = useState(() => new THREE.Vector3(20, 20, 20));
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
-  const { gameState, resetGame, completeGame, setBestTime } = useGameContext();
+  const { gameState, resetGame, completeGame, setBestTime, otpCode } = useGameContext();
   const [action, setAction] = useState({
     name: undefined,
-    lifecycle: undefined,
+    lifecycle: undefined
   });
 
   useEffect(() => {
-    initiateSocketConnection();
+    initiateSocketConnection({ uuid: otpCode });
 
     onConnect();
     onDisconnect();
@@ -69,7 +69,7 @@ export const Player = () => {
         playerRef.current.setTranslation({
           x: playerPosition.x,
           y: playerPosition.y,
-          z: playerPosition.z,
+          z: playerPosition.z
         });
       } else if (lifecycle === 'start') {
         switch (name) {
@@ -77,7 +77,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y,
-              z: playerPosition.z - velocity,
+              z: playerPosition.z - velocity
             });
             break;
           }
@@ -85,7 +85,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y,
-              z: playerPosition.z + velocity,
+              z: playerPosition.z + velocity
             });
             break;
           }
@@ -93,7 +93,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y + velocity,
-              z: playerPosition.z,
+              z: playerPosition.z
             });
             break;
           }
@@ -101,7 +101,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x,
               y: playerPosition.y - velocity,
-              z: playerPosition.z,
+              z: playerPosition.z
             });
             break;
           }
@@ -109,7 +109,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x - velocity,
               y: playerPosition.y,
-              z: playerPosition.z,
+              z: playerPosition.z
             });
             break;
           }
@@ -117,7 +117,7 @@ export const Player = () => {
             playerRef.current.setTranslation({
               x: playerPosition.x + velocity,
               y: playerPosition.y,
-              z: playerPosition.z,
+              z: playerPosition.z
             });
             break;
           }
@@ -150,8 +150,7 @@ export const Player = () => {
       linearDamping={1}
       position={[0, 1, 0]}
       restitution={0}
-      friction={0}
-    >
+      friction={0}>
       <Drone scale={[0.1, 0.1, 0.1]} />
     </RigidBody>
   );

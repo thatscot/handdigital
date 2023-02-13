@@ -1,0 +1,154 @@
+.authenticationContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(25, 25, 25, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  color: black;
+  text-align: start;
+
+  --default-accent-color: #d6d6d6;
+  --default-text-color: #black;
+  --default-button-color: black;
+  --loading-accent-color: #5b6cc9;
+  --loading-text-color: #5b6cc9;
+  --loading-button-color: #5b6cc9;
+  --success-accent-color: #5bc987;
+  --success-text-color: #5bc987;
+  --success-button-color: #5bc987;
+  --error-accent-color: #ff9c9c;
+  --error-text-color: #ff9c9c;
+  --error-button-color: black;
+}
+
+.formContainer {
+  display: grid;
+  gap: 3ch;
+  background-color: white;
+  padding: 5ch 8ch;
+  border-radius: 10ch;
+  text-align: center;
+}
+
+.formContainer h2 {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+  font-family: sans-serif;
+  font-size: 3rem;
+}
+.formContainer p {
+  margin-bottom: 0;
+  margin-top: 1rem;
+  font-family: sans-serif;
+  color: #7a7a7a;
+  font-weight: 500;
+}
+
+.codeInput {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(4, min-content);
+  place-items: center;
+}
+
+.codeInput input:focus {
+  outline: solid 3px hsla(231, 50%, 57%, 0.15);
+}
+
+.codeInput input::-webkit-inner-spin-button,
+.codeInput input::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.codeInput span {
+  color: rgba(25, 25, 25, 0.8);
+}
+
+.codeInput input {
+  appearance: none;
+  text-align: center;
+  font-size: 3ch;
+  width: 1.5ch;
+  padding: 1ch;
+  border-radius: 0.7rem;
+  border: solid 1px #d6d6d6;
+  outline: solid 0 rgba(120, 221, 255, 0.741);
+  transition: 0.1s;
+  background-color: #f8f8f8;
+  color: black;
+}
+
+.authenticationContainer button {
+  background-color: black;
+  color: white;
+  place-self: center;
+  border: none;
+  font-size: 1.5rem;
+  padding: 1ch 7ch;
+  border-radius: 1.5ch;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 10px 10px 0 #00000025;
+  transition: 0.4s;
+}
+
+.error {
+  color: var(--error-text-color);
+  font-weight: 600;
+}
+
+.authenticationContainer button[data-state='default'] {
+  background-color: var(--default-button-color);
+}
+.authenticationContainer button[data-state='error'] {
+  background-color: var(--error-button-color);
+}
+.authenticationContainer button[data-state='loading'] {
+  background-color: var(--loading-button-color);
+  padding-inline: 2rem;
+}
+.authenticationContainer button[data-state='success'] {
+  background-color: var(--success-button-color);
+}
+
+.authenticationContainer input[data-state='default'] {
+  border-color: var(--default-accent-color);
+  -color: black;
+}
+.authenticationContainer input[data-state='error'] {
+  border-color: var(--error-accent-color);
+  color: var(--error-accent-color);
+}
+.authenticationContainer input[data-state='loading'] {
+  border-color: var(--loading-accent-color);
+  color: var(--loading-accent-color);
+}
+.authenticationContainer input[data-state='success'] {
+  border-color: var(--success-accent-color);
+  color: var(--success-accent-color);
+}
+
+.authenticationContainer input[data-state='default']:valid {
+  border: solid 1px var(--loading-accent-color);
+  color: var(--loading-accent-color);
+}
+
+.loadingIcon {
+  width: 2rem;
+  text-align: center;
+  animation: loading-spinner 3s linear infinite;
+}
+
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

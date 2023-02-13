@@ -34,7 +34,6 @@ fieldset {
   width: 10rem;
   padding: 1ch 2ch;
   background-color: rgba(16, 16, 16, 0.6);
-  z-index: 50;
   position: absolute;
   bottom: 1rem;
   left: 1rem;

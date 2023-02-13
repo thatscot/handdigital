@@ -11,7 +11,7 @@ const useGestureRecogniser = ({ numHands = 1, runningMode = 'video' } = {}) => {
     async function getGestureRecogniser() {
       setIsLoading(true);
       const vision = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.1.0-alpha-3/wasm'
       );
       const gestureRecogniser = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
