@@ -24,18 +24,24 @@ db.data ||= { times: [] };
 
 dotenv.config();
 
+const appOrigins = [
+  process.env.THREE_APP_URL,
+  process.env.HANDS_APP_URL,
+  "http://localhost:5000",
+  "http://localhost:5173",
+];
+
 const app = express();
-app.use(cors({ origin: ["http://localhost:5000", process.env.THREE_APP_URL] }));
+app.use(
+  cors({
+    origin: appOrigins,
+  })
+);
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      process.env.THREE_APP_URL,
-      process.env.HANDS_APP_URL,
-      "http://localhost:5000",
-      "http://localhost:5173",
-    ],
+    origin: appOrigins,
     methods: ["GET", "POST"],
   },
 });
