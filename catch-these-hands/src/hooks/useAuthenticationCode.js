@@ -1,7 +1,11 @@
 const useAuthenticationCode = () => {
+
+const BACKEND_URL = import.meta.env.PROD ? import.meta.env.VITE_PROD_BACKEND_URL :  import.meta.env.VITE_LOCAL_BACKEND_URL ;
+
+
   async function verifyCode(code) {
     try {
-      const res = await fetch('http://localhost:3000/authenticate', {
+      const res = await fetch(`${BACKEND_URL}/authenticate`, {
         headers: {
           'Content-Type': 'application/json'
         },
