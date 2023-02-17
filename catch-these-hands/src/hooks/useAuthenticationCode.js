@@ -5,7 +5,7 @@ const BACKEND_URL = import.meta.env.PROD ? import.meta.env.VITE_PROD_BACKEND_URL
 
   async function verifyCode(code) {
     try {
-      const res = await fetch(`${BACKEND_URL}/authenticate`, {
+      const res = await fetch(`http://${BACKEND_URL}/authenticate`, {
         headers: {
           'Content-Type': 'application/json'
         },
