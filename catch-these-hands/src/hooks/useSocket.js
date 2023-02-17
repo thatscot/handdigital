@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-const BACKEND_URL = import.meta.env.PROD ? import.meta.env.VITE_PROD_BACKEND_URL : VITE_LOCAL_BACKEND_URL ;
+const BACKEND_URL = import.meta.env.PROD ? import.meta.env.VITE_PROD_BACKEND_URL :  import.meta.env.VITE_LOCAL_BACKEND_URL ;
 
 const useSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
