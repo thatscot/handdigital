@@ -31,6 +31,8 @@ const appOrigins = [
   "http://localhost:5173",
 ];
 
+console.log("Allowed Origins ", appOrigins);
+
 const app = express();
 app.use(
   cors({
@@ -64,6 +66,14 @@ io.on("connection", (socket) => {
 
     if (sessionId) {
       io.to(sessionId).emit("message", { name, lifecycle });
+    }
+  });
+
+  socket.on("time", async (time) => {
+    if (time > 0) {
+      db.data.times.push(time);
+      await db.write();
+      io.emit("time", getBestTime());
     }
   });
 });
